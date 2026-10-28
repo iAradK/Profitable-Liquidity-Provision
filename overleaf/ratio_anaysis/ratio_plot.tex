@@ -1,0 +1,40 @@
+\begin{figure}[t]
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=0.8\linewidth,
+      height=4.5cm,
+      ymode=log,
+      log basis y=10,
+      date coordinates in=x,
+      grid=both,
+      xlabel={Date},
+      ylabel={Price ratio},
+      extra x ticks={2020-09-01, 2025-08-01},
+      xticklabel style={rotate=45, anchor=east},
+      legend style={
+        font=\tiny,             % smaller legend font
+        at={(1.02,0.5)},         % move legend outside to the right, centered vertically
+        anchor=west,             % attach west side of legend box to that point
+        draw=none                % optional: no border
+      }
+    ]
+      \addplot+[color=OkabeBlue, thick] table[x=date, y=ETH_USDT, col sep=comma]{ratio_anaysis/token_ratio_timeseries_simple.csv};
+      \addlegendentry{ETH/USDC}
+
+      \addplot+[color=OkabeOrange, thick, dashed] table[x=date, y=BTC_USDT, col sep=comma]{ratio_anaysis/token_ratio_timeseries_simple.csv};
+      \addlegendentry{BTC/USDC}
+
+      \addplot+[color=OkabeGreen, thick] table[x=date, y=BTC_ETH, col sep=comma]{ratio_anaysis/token_ratio_timeseries_simple.csv};
+      \addlegendentry{BTC/ETH}
+
+      \addplot+[color=OkabeSky, thick] table[x=date, y=ETH_SOL, col sep=comma]{ratio_anaysis/token_ratio_timeseries_simple.csv};
+      \addlegendentry{ETH/SOL}
+
+      \addplot+[color=OkabeVermilion, thick, dotted] table[x=date, y=ETH_DOT, col sep=comma]{ratio_anaysis/token_ratio_timeseries_simple.csv};
+      \addlegendentry{ETH/DOT}
+    \end{axis}
+  \end{tikzpicture}
+  \caption{Price ratios of multiple coins between September 2020 and August 2025.}
+  \label{fig:crypto-ratios-tikz}
+\end{figure}

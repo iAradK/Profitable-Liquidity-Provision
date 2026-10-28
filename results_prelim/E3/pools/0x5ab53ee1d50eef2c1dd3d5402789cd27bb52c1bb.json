@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "AAVE/WETH 0.30%",
+  "category": "governance",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.08171206225680938,
+  "mean_phi": 0.9660234230012529,
+  "mean_phi_lo": 0.9539546707025792,
+  "mean_phi_hi": 0.9736681552168399,
+  "mean_half_life": 39.54278626754532,
+  "mean_half_life_lo": 26.15342908330972,
+  "mean_half_life_hi": 53.481531096534965,
+  "median_half_life": 25.54691788256013,
+  "share_adf_rejects_unit_root": 0.0622568093385214,
+  "share_kpss_rejects_stationarity": 0.8015564202334631
+ },
+ "regimes": [
+  {
+   "label": "AAVE/WETH 0.30%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9946763874348158,
+   "ar1_half_life": 129.85552708269032,
+   "ar2_phi1": 1.0566067882004584,
+   "ar2_phi2": -0.06209384878774604,
+   "ar2_persistence": 0.9945129394127123,
+   "ar2_half_life": 125.97706101314034,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.07452550459916198,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "AAVE/WETH 0.30%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 0.9908947808229306,
+   "ar1_half_life": 75.77925670231083,
+   "ar2_phi1": 1.0586342137481042,
+   "ar2_phi2": -0.06805663143055751,
+   "ar2_persistence": 0.9905775823175467,
+   "ar2_half_life": 73.21650240225706,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.43503105240542467,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "AAVE/WETH 0.30%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9961063986653526,
+   "ar1_half_life": 177.6753253132927,
+   "ar2_phi1": 1.0553195987708737,
+   "ar2_phi2": -0.059447663743796175,
+   "ar2_persistence": 0.9958719350270775,
+   "ar2_half_life": 167.56410580730298,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.4515968495332842,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "AAVE/WETH 0.30%",
+   "q": 2,
+   "variance_ratio": 1.061575437441013,
+   "z_robust": 0.04635497938204087,
+   "p_value": 0.9630273191602073
+  },
+  {
+   "label": "AAVE/WETH 0.30%",
+   "q": 5,
+   "variance_ratio": 1.025373768434537,
+   "z_robust": 0.008896940716648453,
+   "p_value": 0.9929013620133685
+  },
+  {
+   "label": "AAVE/WETH 0.30%",
+   "q": 10,
+   "variance_ratio": 1.030102702940165,
+   "z_robust": 0.0071843700819981355,
+   "p_value": 0.9942677513443569
+  },
+  {
+   "label": "AAVE/WETH 0.30%",
+   "q": 20,
+   "variance_ratio": 1.0328440016431562,
+   "z_robust": 0.005564351913141487,
+   "p_value": 0.9955603124279192
+  }
+ ]
+}

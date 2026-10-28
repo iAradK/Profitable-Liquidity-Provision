@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "SHIB/WETH 0.30%",
+  "category": "high-vol",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.06614785992217898,
+  "mean_phi": 0.9586230808069572,
+  "mean_phi_lo": 0.9448099361694728,
+  "mean_phi_hi": 0.9676979864885618,
+  "mean_half_life": 38.65740348101843,
+  "mean_half_life_lo": 22.202839177238484,
+  "mean_half_life_hi": 58.18869472052951,
+  "median_half_life": 17.886156822599716,
+  "share_adf_rejects_unit_root": 0.058365758754863814,
+  "share_kpss_rejects_stationarity": 0.7276264591439688
+ },
+ "regimes": [
+  {
+   "label": "SHIB/WETH 0.30%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9963320259757901,
+   "ar1_half_life": 188.62597567558493,
+   "ar2_phi1": 1.0080655009810142,
+   "ar2_phi2": -0.011800855495540885,
+   "ar2_persistence": 0.9962646454854733,
+   "ar2_half_life": 185.21717153911263,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.1266984782872268,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "SHIB/WETH 0.30%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 0.9914817674630256,
+   "ar1_half_life": 81.02511570758033,
+   "ar2_phi1": 1.006719675922207,
+   "ar2_phi2": -0.015422118740202273,
+   "ar2_persistence": 0.9912975571820047,
+   "ar2_half_life": 79.30264691426217,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.5421109044794508,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "SHIB/WETH 0.30%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9972555593228208,
+   "ar1_half_life": 252.21736435994245,
+   "ar2_phi1": 1.0033096649128879,
+   "ar2_phi2": -0.0060159379377451305,
+   "ar2_persistence": 0.9972937269751427,
+   "ar2_half_life": 255.77937917726769,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.5721373885990793,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "SHIB/WETH 0.30%",
+   "q": 2,
+   "variance_ratio": 1.010628756886619,
+   "z_robust": 0.003284307303683972,
+   "p_value": 0.9973795066205274
+  },
+  {
+   "label": "SHIB/WETH 0.30%",
+   "q": 5,
+   "variance_ratio": 1.1232194954296277,
+   "z_robust": 0.01758239839999155,
+   "p_value": 0.985971998549595
+  },
+  {
+   "label": "SHIB/WETH 0.30%",
+   "q": 10,
+   "variance_ratio": 1.1807619938709752,
+   "z_robust": 0.019243199492800962,
+   "p_value": 0.9846470957620247
+  },
+  {
+   "label": "SHIB/WETH 0.30%",
+   "q": 20,
+   "variance_ratio": 1.127543233007246,
+   "z_robust": 0.010881740976621389,
+   "p_value": 0.991317798226997
+  }
+ ]
+}

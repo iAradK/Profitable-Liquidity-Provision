@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "WBTC/USDC 0.05%",
+  "category": "stable-volatile",
+  "n_days": 1972,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.05058365758754868,
+  "mean_phi": 0.9732534822094737,
+  "mean_phi_lo": 0.9673338077720702,
+  "mean_phi_hi": 0.9793211809398057,
+  "mean_half_life": 64.17436862987884,
+  "mean_half_life_lo": 46.260955970016425,
+  "mean_half_life_hi": 93.32366008430226,
+  "median_half_life": 34.35876501124395,
+  "share_adf_rejects_unit_root": 0.06614785992217899,
+  "share_kpss_rejects_stationarity": 0.8521400778210116
+ },
+ "regimes": [
+  {
+   "label": "WBTC/USDC 0.05%",
+   "regime": "full",
+   "n_days": 1972,
+   "ar1_phi": 0.9985024769704431,
+   "ar1_half_life": 462.5157912921826,
+   "ar2_phi1": 0.9752043138324309,
+   "ar2_phi2": 0.023311408907404796,
+   "ar2_persistence": 0.9985157227398357,
+   "ar2_half_life": 466.6464012491045,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.7047793617100094,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "WBTC/USDC 0.05%",
+   "regime": "pre_split",
+   "n_days": 392,
+   "ar1_phi": 0.9830769584933162,
+   "ar1_half_life": 40.611223286622646,
+   "ar2_phi1": 0.963705065001049,
+   "ar2_phi2": 0.01815707985873538,
+   "ar2_persistence": 0.9818621448597844,
+   "ar2_half_life": 37.86786787087667,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.09442835659886589,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "WBTC/USDC 0.05%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9986488295686576,
+   "ar1_half_life": 512.650942456357,
+   "ar2_phi1": 0.9755105664733031,
+   "ar2_phi2": 0.023175715205726477,
+   "ar2_persistence": 0.9986862816790296,
+   "ar2_half_life": 527.2757254525412,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.7688186640251102,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "WBTC/USDC 0.05%",
+   "q": 2,
+   "variance_ratio": 0.9760812635792243,
+   "z_robust": -0.02407245297423839,
+   "p_value": 0.9807948162953335
+  },
+  {
+   "label": "WBTC/USDC 0.05%",
+   "q": 5,
+   "variance_ratio": 0.975137123934452,
+   "z_robust": -0.012790087319413711,
+   "p_value": 0.9897952650231413
+  },
+  {
+   "label": "WBTC/USDC 0.05%",
+   "q": 10,
+   "variance_ratio": 0.9260233883658309,
+   "z_robust": -0.01916858292784838,
+   "p_value": 0.9847066201878781
+  },
+  {
+   "label": "WBTC/USDC 0.05%",
+   "q": 20,
+   "variance_ratio": 0.9128221960157243,
+   "z_robust": -0.014444813073195919,
+   "p_value": 0.9884751074497873
+  }
+ ]
+}

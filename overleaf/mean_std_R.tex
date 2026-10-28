@@ -1,0 +1,39 @@
+    \begin{tikzpicture}
+        \begin{axis}[
+            ybar,
+            width=1.6\textwidth,
+            height=0.84\textwidth,
+            ylabel={Mean / SD},
+            symbolic x coords={45,cb,4e,11,9d,5a,a6,1d},
+            xtick=data,
+            x tick label style={rotate=45,anchor=east},
+            legend style={at={(0.02,0.82)},anchor=north west, font=\small},
+            bar width=9pt,
+            enlarge x limits=0.08,
+            ymajorgrids=true,
+            %ymode=log,
+            grid style={dotted},
+            % make y-axis easier to read
+            ymin=0, ymax=1.1,
+            ytick={0, 0.2,0.4,0.6,0.8,1},
+            yticklabel style={/pgf/number format:fixed,/pgf/number format:precision=2},
+        ]
+
+        % Mean(R^{(1m)})
+        \addplot table[
+            col sep=tab,
+            x=pool_short,
+            y=mean_R_month
+        ] {monthly_R/monthly_R_stats_summary.dat};
+        \addlegendentry{Mean of $R^{(1m)}_t$}
+
+        % Std(R^{(1m)})
+        \addplot table[
+            col sep=tab,
+            x=pool_short,
+            y=std_R_month
+        ] {monthly_R/monthly_R_stats_summary.dat};
+        \addlegendentry{SD\ of $R^{(1m)}_t$}
+
+        \end{axis}
+    \end{tikzpicture}

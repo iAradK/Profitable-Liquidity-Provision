@@ -1,0 +1,118 @@
+% Monthly closing price p (series may be inverted in preprocessing if first close < 1)
+
+\begin{tikzpicture}
+  \begin{axis}[
+    width=0.62\textwidth,
+    height=0.35\textwidth,
+    xlabel={Month},
+    ylabel={Closing Price $p$},
+    xmin=1, xmax=54,
+    ymin=0,
+    ymax=1.5*10^5,
+    ymajorgrids=true,
+    legend style={
+      at={(1.2,0.96)},
+      anchor=north west,
+      font=\tiny,
+      draw=black,
+      fill=white,
+      fill opacity=0.9,
+      text opacity=1,
+    },
+    legend cell align={left},
+    xmin=1, xmax=56,
+    xtick={1,12,23,34,45,56},
+    xticklabels={2021-05,2022-04,2023-03,2024-02,2025-01,2025-12},
+    xticklabel style={font=\small},
+    ymode=log,
+  ]
+
+    % -------------------------
+    % WBTC/WETH (blue family, different markers)
+    % -------------------------
+    % 45: WBTC/WETH 0.05%
+    \addplot+[
+      color=blue!85!black,
+      mark=x,
+      line width=0.8pt
+    ] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0x4585fe77225b41b697c938b018e2ac67ac5a20c0.csv};
+    \addlegendentry{45: WBTC/WETH 0.05\%}
+
+    % cb: WBTC/WETH 0.30%  (force it to be clearly blue + filled marker)
+    \addplot+[
+      color=blue!35!white,
+      mark=pentagon*,
+      mark options={fill=blue!35!white},
+      line width=0.8pt
+    ] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0xcbcdf9626bc03e24f779434178a73a0b4bad62ed.csv};
+    \addlegendentry{cb: WBTC/WETH 0.30\%}
+
+    % -------------------------
+    % WETH/USDT (green family, different markers)
+    % -------------------------
+    % 4e: WETH/USDT 0.30%
+    \addplot+[color=green!60!black, mark=*, mark options={fill=green!60!black}] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0x4e68ccd3e89f51c3074ca5072bbac773960dfa36.csv};
+    \addlegendentry{4e: WETH/USDT 0.30\%}
+
+    % 11: WETH/USDT 0.05%
+    \addplot+[color=green!25!black, mark=diamond*, mark options={fill=green!25!black}] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0x11b815efb8f581194ae79006d24e0d814b7697f6.csv};
+    \addlegendentry{11: WETH/USDT 0.05\%}
+
+    % -------------------------
+    % Distinct singletons
+    % -------------------------
+    % 9d: WBTC/USDT 0.30%
+    \addplot+[color=violet!75!black, mark=triangle*, mark options={fill=violet!75!black}] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0x9db9e0e53058c89e5b94e29621a205198648425b.csv};
+    \addlegendentry{9d: WBTC/USDT 0.30\%}
+
+    % 5a: AAVE/WETH 0.30%  (moved away from red; clearly not blue)
+    \addplot+[
+      color=purple!75!black,
+      mark=square*,
+      mark options={fill=purple!75!black},
+      dashed
+    ] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0x5ab53ee1d50eef2c1dd3d5402789cd27bb52c1bb.csv};
+    \addlegendentry{5a: AAVE/WETH 0.30\%}
+
+    % a6: LINK/WETH 0.30%
+    \addplot+[color=orange!85!black, mark=star, mark options={fill=orange!85!black}] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0xa6cc3c2531fdaa6ae1a3ca84c2855806728693e8.csv};
+    \addlegendentry{a6: LINK/WETH 0.30\%}
+
+    % 1d: UNI/WETH 0.30%
+    \addplot+[color=cyan!80!black, mark=otimes*, mark options={fill=cyan!80!black}] table[
+      col sep=comma,
+      x expr=\coordindex+1,
+      y=close
+    ]{monthly_price/monthly_close_0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801.csv};
+    \addlegendentry{1d: UNI/WETH 0.30\%}
+
+  \end{axis}
+\end{tikzpicture}

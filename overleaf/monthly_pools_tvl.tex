@@ -1,0 +1,100 @@
+\begin{tikzpicture}
+  \begin{axis}[
+    width=0.95\linewidth,
+    height=0.7\linewidth,
+    xlabel={Month},
+    ylabel={Total Value Locked (USD)},
+    xmin=1, xmax=56,
+    ymode=log,
+    ymin=1e5, ymax=1e9,
+    ymajorgrids=true,
+    xmajorgrids=false,
+    xtick={1,13,25,37,49},
+    xticklabels={2021-05,2022-05,2023-05,2024-05,2025-05},
+    xticklabel style={
+        font=\scriptsize,
+        rotate=35,
+        anchor=east
+    },
+    xlabel style={yshift=-0.5em},
+    legend style={at={(0.02,0.02)},anchor=south west,font=\tiny,draw=black,fill=white,fill opacity=0.9,text opacity=1},
+    legend cell align=left,
+]
+
+    % Data file: tvl_analysis/tvl_monthly_end.dat
+    % Expected columns: month tvl_45 tvl_cb tvl_4e tvl_11 tvl_9d tvl_5a tvl_a6 tvl_1d
+
+    % 45: WBTC/WETH 0.05%
+    \addplot+[
+      color=blue!85!black,
+      mark=x,
+      line width=0.8pt
+    ] table[x=month,y=tvl_45] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{45: WBTC/WETH 0.05\%}
+
+    % cb: WBTC/WETH 0.30%
+    \addplot+[
+      color=blue!35!white,
+      mark=pentagon*,
+      mark options={fill=blue!35!white},
+      line width=0.8pt
+    ] table[x=month,y=tvl_cb] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{cb: WBTC/WETH 0.30\%}
+
+    % 4e: WETH/USDT 0.30%
+    \addplot+[
+      color=green!60!black,
+      mark=*,
+      mark options={fill=green!60!black},
+      line width=0.8pt
+    ] table[x=month,y=tvl_4e] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{4e: WETH/USDT 0.30\%}
+
+    % 11: WETH/USDT 0.05%
+    \addplot+[
+      color=green!25!black,
+      mark=diamond*,
+      mark options={fill=green!25!black},
+      line width=0.8pt
+    ] table[x=month,y=tvl_11] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{11: WETH/USDT 0.05\%}
+
+    % 9d: WBTC/USDT 0.30%
+    \addplot+[
+      color=violet!75!black,
+      mark=triangle*,
+      mark options={fill=violet!75!black},
+      line width=0.8pt
+    ] table[x=month,y=tvl_9d] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{9d: WBTC/USDT 0.30\%}
+
+    % 5a: AAVE/WETH 0.30%
+    \addplot+[
+      color=purple!75!black,
+      mark=square*,
+      mark options={fill=purple!75!black},
+      dashed,
+      line width=0.8pt
+    ] table[x=month,y=tvl_5a] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{5a: AAVE/WETH 0.30\%}
+
+    % a6: LINK/WETH 0.30%
+    \addplot+[
+      color=orange!85!black,
+      mark=star,
+      mark options={fill=orange!85!black},
+      line width=0.8pt
+    ] table[x=month,y=tvl_a6] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{a6: LINK/WETH 0.30\%}
+
+    % 1d: UNI/WETH 0.30%
+    \addplot+[
+      color=cyan!80!black,
+      mark=otimes*,
+      mark options={fill=cyan!80!black},
+      line width=0.8pt
+    ] table[x=month,y=tvl_1d] {tvl_analysis/tvl_monthly_end.dat};
+    %\addlegendentry{1d: UNI/WETH 0.30\%}
+
+  \end{axis}
+\end{tikzpicture}

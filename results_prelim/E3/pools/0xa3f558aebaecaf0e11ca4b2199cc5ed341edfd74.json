@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "LDO/WETH 0.30%",
+  "category": "governance",
+  "n_days": 1975,
+  "n_windows": 246,
+  "n_constant_windows": 11,
+  "share_excluded": 0.016260162601625994,
+  "mean_phi": 0.9557639227948427,
+  "mean_phi_lo": 0.9524048668744567,
+  "mean_phi_hi": 0.9747044794515549,
+  "mean_half_life": 36.41923192548435,
+  "mean_half_life_lo": 25.840596298836275,
+  "mean_half_life_hi": 52.0530672085243,
+  "median_half_life": 21.755267425700467,
+  "share_adf_rejects_unit_root": 0.1016260162601626,
+  "share_kpss_rejects_stationarity": 0.8008130081300813
+ },
+ "regimes": [
+  {
+   "label": "LDO/WETH 0.30%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9989436550123871,
+   "ar1_half_life": 655.8283732302483,
+   "ar2_phi1": 0.9393020088600618,
+   "ar2_phi2": 0.059796221878335776,
+   "ar2_persistence": 0.9990982307383975,
+   "ar2_half_life": NaN,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.8828416832901504,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "LDO/WETH 0.30%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 0.9937399907984257,
+   "ar1_half_life": 110.37928759555204,
+   "ar2_phi1": 0.9661630684782389,
+   "ar2_phi2": 0.02875265851330877,
+   "ar2_persistence": 0.9949157269915476,
+   "ar2_half_life": 135.98475292478474,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.9528603359723533,
+   "kpss_p": 0.017156485152337354
+  },
+  {
+   "label": "LDO/WETH 0.30%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9990742001169743,
+   "ar1_half_life": NaN,
+   "ar2_phi1": 0.9348242013874263,
+   "ar2_phi2": 0.06440552465516403,
+   "ar2_persistence": 0.9992297260425903,
+   "ar2_half_life": NaN,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.8940853446368717,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "LDO/WETH 0.30%",
+   "q": 2,
+   "variance_ratio": 0.9404474204896187,
+   "z_robust": -0.040657797607229665,
+   "p_value": 0.9675687063858276
+  },
+  {
+   "label": "LDO/WETH 0.30%",
+   "q": 5,
+   "variance_ratio": 0.8867325820455922,
+   "z_robust": -0.03253833520337121,
+   "p_value": 0.9740427451325665
+  },
+  {
+   "label": "LDO/WETH 0.30%",
+   "q": 10,
+   "variance_ratio": 0.8086662917228147,
+   "z_robust": -0.035407650844308775,
+   "p_value": 0.9717546840472582
+  },
+  {
+   "label": "LDO/WETH 0.30%",
+   "q": 20,
+   "variance_ratio": 0.8168473734873054,
+   "z_robust": -0.024816892530554045,
+   "p_value": 0.9802010169171526
+  }
+ ]
+}

@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "MKR/WETH 0.30%",
+  "category": "governance",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.07392996108949412,
+  "mean_phi": 0.9751981970983353,
+  "mean_phi_lo": 0.9671883311132377,
+  "mean_phi_hi": 0.9821691905429882,
+  "mean_half_life": 56.38281368675676,
+  "mean_half_life_lo": 38.63914184430738,
+  "mean_half_life_hi": 79.77840959267438,
+  "median_half_life": 34.976300045829944,
+  "share_adf_rejects_unit_root": 0.06614785992217899,
+  "share_kpss_rejects_stationarity": 0.7120622568093385
+ },
+ "regimes": [
+  {
+   "label": "MKR/WETH 0.30%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9924626055897937,
+   "ar1_half_life": 91.6141025800764,
+   "ar2_phi1": 1.0238333413287828,
+   "ar2_phi2": -0.03163554942828628,
+   "ar2_persistence": 0.9921977919004965,
+   "ar2_half_life": 88.49284746700579,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.00560930361981094,
+   "kpss_p": 0.05540163391152604
+  },
+  {
+   "label": "MKR/WETH 0.30%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 0.987205248384833,
+   "ar1_half_life": 53.82701917721915,
+   "ar2_phi1": 0.9568319888485048,
+   "ar2_phi2": 0.029796985514658703,
+   "ar2_persistence": 0.9866289743631635,
+   "ar2_half_life": 51.49214116255468,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.2385848530721727,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "MKR/WETH 0.30%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9929354748189065,
+   "ar1_half_life": 97.7696153668094,
+   "ar2_phi1": 1.0383121792607173,
+   "ar2_phi2": -0.04565584499053943,
+   "ar2_persistence": 0.9926563342701779,
+   "ar2_half_life": 94.0400828131783,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.03244031088277402,
+   "kpss_p": 0.08786442363574903
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "MKR/WETH 0.30%",
+   "q": 2,
+   "variance_ratio": 1.0296207075080188,
+   "z_robust": 0.02028423086209105,
+   "p_value": 0.9838166351492891
+  },
+  {
+   "label": "MKR/WETH 0.30%",
+   "q": 5,
+   "variance_ratio": 1.147673132247465,
+   "z_robust": 0.04775344491290506,
+   "p_value": 0.96191273977277
+  },
+  {
+   "label": "MKR/WETH 0.30%",
+   "q": 10,
+   "variance_ratio": 1.306518184963957,
+   "z_robust": 0.06798103515069334,
+   "p_value": 0.9458007311119287
+  },
+  {
+   "label": "MKR/WETH 0.30%",
+   "q": 20,
+   "variance_ratio": 1.3905163092597792,
+   "z_robust": 0.06258026551891849,
+   "p_value": 0.9501007444447553
+  }
+ ]
+}

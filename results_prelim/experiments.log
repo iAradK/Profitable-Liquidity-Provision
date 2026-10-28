@@ -1,0 +1,91 @@
+2026-10-27 20:05:53,549 WARNING no daily fees (run the 'daily' download step), fees are NOT capped for: WETH/USDT 0.30%, WETH/USDT 0.05%, WBTC/USDT 0.30%, USDC/WETH 0.05%, USDC/WETH 0.30%, WBTC/USDC 0.30%, USDC/WETH 1.00%, WBTC/USDC 0.05%, DAI/WETH 0.30%, USDC/USDT 0.01%, DAI/USDC 0.01%, FRAX/USDC 0.05%, WBTC/WETH 0.05%, WBTC/WETH 0.30%, wstETH/WETH 0.01%, rETH/WETH 0.05%, cbETH/WETH 0.05%, AAVE/WETH 0.30%, LINK/WETH 0.30%, UNI/WETH 0.30%, MKR/WETH 0.30%, LDO/WETH 0.30%, CRV/WETH 0.30%, APE/WETH 0.30%, SHIB/WETH 0.30%, PEPE/WETH 0.30%, CRV/WETH 1.00%
+2026-10-27 20:05:53,555 INFO    loaded 27 pools, 18 token price series; data ends 2026-10-27 07:00:00
+2026-10-27 20:05:53,633 INFO    E0: started
+2026-10-27 20:05:58,937 INFO    E0: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E0
+2026-10-27 20:05:58,938 INFO    E1: started
+2026-10-27 20:06:14,772 INFO    E1: finished in 0.3 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E1
+2026-10-27 20:06:14,773 INFO    E2: started
+2026-10-27 20:06:16,402 INFO    E2: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E2
+2026-10-27 20:06:16,404 INFO    E3: started
+2026-10-27 20:06:24,680 INFO    E3: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E3
+2026-10-27 20:06:24,681 INFO    E4: started
+2026-10-27 20:06:25,323 INFO    E4: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E4
+2026-10-27 20:06:25,325 INFO    E5: started
+2026-10-27 20:06:41,341 INFO    E5: finished in 0.3 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E5
+2026-10-27 20:06:41,342 INFO    E6: started
+2026-10-27 20:06:47,073 INFO    E6: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E6
+2026-10-27 20:06:47,076 INFO    E7: started
+2026-10-27 20:06:48,354 INFO    E7: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E7
+2026-10-27 20:06:48,355 INFO    E8: started
+2026-10-27 20:07:14,170 INFO    E8: finished in 0.4 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E8
+2026-10-27 20:07:14,171 INFO    E9: started
+2026-10-27 20:07:21,168 INFO    E9: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E9
+2026-10-27 20:07:21,169 INFO    E10: started
+2026-10-27 20:07:21,673 INFO    E10: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E10
+2026-10-27 20:07:21,674 INFO    E11: started
+2026-10-27 20:07:21,730 WARNING E11 skipped: no data in /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/pool_data_arbitrum yet
+2026-10-27 20:07:21,731 INFO    summary: 11 finished, 1 skipped, 0 already done, 0 failed
+2026-10-27 20:12:03,050 INFO    already finished (delete the folder or set force_refresh to redo): E0, E3
+2026-10-27 20:12:05,008 INFO    loaded 27 pools, 18 token price series; data ends 2026-10-27 07:00:00
+2026-10-27 20:12:05,038 INFO    E1: started
+2026-10-27 20:12:21,701 INFO    E1: finished in 0.3 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E1
+2026-10-27 20:12:21,702 INFO    E2: started
+2026-10-27 20:12:23,962 INFO    E2: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E2
+2026-10-27 20:12:23,963 INFO    E4: started
+2026-10-27 20:12:24,536 INFO    E4: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E4
+2026-10-27 20:12:24,537 INFO    E5: started
+2026-10-27 20:12:40,330 INFO    E5: finished in 0.3 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E5
+2026-10-27 20:12:40,331 INFO    E6: started
+2026-10-27 20:12:46,064 INFO    E6: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E6
+2026-10-27 20:12:46,065 INFO    E7: started
+2026-10-27 20:12:47,444 INFO    E7: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E7
+2026-10-27 20:12:47,445 INFO    E8: started
+2026-10-27 20:12:52,428 INFO    E8: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E8
+2026-10-27 20:12:52,429 INFO    E9: started
+2026-10-27 20:12:58,518 INFO    E9: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E9
+2026-10-27 20:12:58,519 INFO    E10: started
+2026-10-27 20:12:59,024 INFO    E10: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E10
+2026-10-27 20:12:59,025 INFO    E11: started
+2026-10-27 20:12:59,052 WARNING E11 skipped: no data in /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/pool_data_arbitrum yet
+2026-10-27 20:12:59,053 INFO    summary: 9 finished, 1 skipped, 2 already done, 0 failed
+2026-10-27 20:14:12,858 INFO    already finished (delete the folder or set force_refresh to redo): E0, E1, E2, E3, E4, E9
+2026-10-27 20:14:14,669 INFO    loaded 27 pools, 18 token price series; data ends 2026-10-27 07:00:00
+2026-10-27 20:14:14,704 INFO    E5: started
+2026-10-27 20:14:32,596 INFO    E5: finished in 0.3 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E5
+2026-10-27 20:14:32,597 INFO    E6: started
+2026-10-27 20:14:38,324 INFO    E6: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E6
+2026-10-27 20:14:38,325 INFO    E7: started
+2026-10-27 20:14:39,623 INFO    E7: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E7
+2026-10-27 20:14:39,623 INFO    E8: started
+2026-10-27 20:15:07,539 INFO    E8: finished in 0.5 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E8
+2026-10-27 20:15:07,540 INFO    E10: started
+2026-10-27 20:15:08,104 INFO    E10: finished in 0.0 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E10
+2026-10-27 20:15:08,105 INFO    E11: started
+2026-10-27 20:15:08,123 WARNING E11 skipped: no data in /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/pool_data_arbitrum yet
+2026-10-27 20:15:08,124 INFO    summary: 5 finished, 1 skipped, 6 already done, 0 failed
+2026-10-27 20:26:20,100 INFO    already finished (delete the folder or set force_refresh to redo): E0, E1, E2, E3, E6, E7, E8, E9, E10
+2026-10-27 20:26:21,480 INFO    loaded 27 pools, 18 token price series; data ends 2026-10-27 07:00:00
+2026-10-27 20:26:21,515 INFO    E4: started
+2026-10-27 20:26:26,190 INFO    E4: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E4
+2026-10-27 20:26:26,191 INFO    E5: started
+2026-10-27 20:26:47,049 INFO    E5: finished in 0.3 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E5
+2026-10-27 20:26:47,050 INFO    E11: started
+2026-10-27 20:26:47,061 WARNING E11 skipped: no data in /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/pool_data_arbitrum yet
+2026-10-27 20:26:47,063 INFO    summary: 2 finished, 1 skipped, 9 already done, 0 failed
+2026-10-27 20:46:52,714 INFO    already finished (delete the folder or set force_refresh to redo): E0, E1, E2, E3, E4, E5, E6, E7, E9, E10
+2026-10-27 20:46:54,440 INFO    loaded 27 pools, 18 token price series; data ends 2026-10-27 07:00:00
+2026-10-27 20:46:54,476 INFO    E8: started
+2026-10-27 20:47:11,488 INFO    E8: finished in 0.3 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E8
+2026-10-27 20:47:11,488 INFO    E11: started
+2026-10-27 20:47:11,506 WARNING E11 skipped: no data in /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/pool_data_arbitrum yet
+2026-10-27 20:47:11,506 INFO    summary: 1 finished, 1 skipped, 10 already done, 0 failed
+2026-10-27 20:59:02,608 INFO    already finished (delete the folder or set force_refresh to redo): E0, E1, E2, E3, E4, E5, E7, E9, E10
+2026-10-27 20:59:04,292 INFO    loaded 27 pools, 18 token price series; data ends 2026-10-27 07:00:00
+2026-10-27 20:59:04,340 INFO    E6: started
+2026-10-27 20:59:07,744 INFO      81 of 81 items already computed
+2026-10-27 20:59:11,420 INFO    E6: finished in 0.1 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E6
+2026-10-27 20:59:11,421 INFO    E8: started
+2026-10-27 20:59:23,407 INFO    E8: finished in 0.2 min -> /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/results_prelim/E8
+2026-10-27 20:59:23,408 INFO    E11: started
+2026-10-27 20:59:23,440 WARNING E11 skipped: no data in /mnt/c/Users/aradk/Desktop/master/Implermenant loss/Correlation/pool_data_arbitrum yet
+2026-10-27 20:59:23,441 INFO    summary: 2 finished, 1 skipped, 9 already done, 0 failed

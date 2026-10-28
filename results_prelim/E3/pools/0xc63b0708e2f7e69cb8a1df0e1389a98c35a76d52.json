@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "FRAX/USDC 0.05%",
+  "category": "stable-stable",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.011673151750972721,
+  "mean_phi": 0.9221329686093303,
+  "mean_phi_lo": 0.9011560425862554,
+  "mean_phi_hi": 0.961463663607065,
+  "mean_half_life": 27.73683339450338,
+  "mean_half_life_lo": 16.680451240615028,
+  "mean_half_life_hi": 44.6989583818101,
+  "median_half_life": 11.372383314132318,
+  "share_adf_rejects_unit_root": 0.17509727626459143,
+  "share_kpss_rejects_stationarity": 0.7392996108949417
+ },
+ "regimes": [
+  {
+   "label": "FRAX/USDC 0.05%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.986057521008764,
+   "ar1_half_life": 49.36738857216362,
+   "ar2_phi1": 0.6801221914749151,
+   "ar2_phi2": 0.3107869666833344,
+   "ar2_persistence": 0.9909091581582495,
+   "ar2_half_life": 75.89965279133642,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(2)",
+   "adf_p": 0.8749060422466381,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "FRAX/USDC 0.05%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 0.6454726410661009,
+   "ar1_half_life": 1.5833503792165824,
+   "ar2_phi1": 0.5463336384723622,
+   "ar2_phi2": 0.15401396289273656,
+   "ar2_persistence": 0.7003476013650987,
+   "ar2_half_life": 1.9460669091554832,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.0004800727732194566,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "FRAX/USDC 0.05%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9926718757480334,
+   "ar1_half_life": 94.24025973756707,
+   "ar2_phi1": 0.6682346999046237,
+   "ar2_phi2": 0.327413669001826,
+   "ar2_persistence": 0.9956483689064497,
+   "ar2_half_life": 158.93762799896925,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(2)",
+   "adf_p": 0.90894187398714,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "FRAX/USDC 0.05%",
+   "q": 2,
+   "variance_ratio": 0.6849795250431212,
+   "z_robust": -0.06859367763478219,
+   "p_value": 0.9453130515314997
+  },
+  {
+   "label": "FRAX/USDC 0.05%",
+   "q": 5,
+   "variance_ratio": 0.4236287531467515,
+   "z_robust": -0.06220471956804768,
+   "p_value": 0.9503998040990399
+  },
+  {
+   "label": "FRAX/USDC 0.05%",
+   "q": 10,
+   "variance_ratio": 0.27797156491450675,
+   "z_robust": -0.05434169879409725,
+   "p_value": 0.9566629277818172
+  },
+  {
+   "label": "FRAX/USDC 0.05%",
+   "q": 20,
+   "variance_ratio": 0.19760588420851613,
+   "z_robust": -0.043435864264113826,
+   "p_value": 0.9653540891192324
+  }
+ ]
+}

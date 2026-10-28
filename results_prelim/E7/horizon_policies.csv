@@ -1,0 +1,9 @@
+subset,policy,n_decisions,mean_monthly_net,matched_minus_policy,lo,hi,p_value
+selected_by_net_tail,matched,50,0.0034621,,,,
+selected_by_net_tail,fixed_1m,50,0.00332768,0.00013442,-0.00230142,0.00225725,0.877
+selected_by_net_tail,fixed_2m,50,0.00405326,-0.000591164,-0.00145341,0.000296208,0.203
+selected_by_net_tail,fixed_3m,50,0.00413361,-0.000671509,-0.00287915,0.0014687,0.5305
+all_eligible,matched,50,-2.95761e-05,,,,
+all_eligible,fixed_1m,50,-0.000987023,0.000957447,0.000102185,0.0016149,0.0155
+all_eligible,fixed_2m,50,0.000259094,-0.00028867,-0.000586344,0.000115584,0.127
+all_eligible,fixed_3m,50,0.000515585,-0.000545161,-0.000894896,-9.35825e-05,0.012

@@ -1,0 +1,16 @@
+secrets.toml
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# IDE
+.idea/
+
+# Previous version of the project (kept on the main branch)
+old/
+
+# Large / regenerable data
+pool_data/
+results_prelim/cache/

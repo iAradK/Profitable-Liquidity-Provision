@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "rETH/WETH 0.05%",
+  "category": "correlated",
+  "n_days": 1723,
+  "n_windows": 221,
+  "n_constant_windows": 0,
+  "share_excluded": 0.04524886877828049,
+  "mean_phi": 0.9603288071159033,
+  "mean_phi_lo": 0.9430361811448519,
+  "mean_phi_hi": 0.9779719885257874,
+  "mean_half_life": 46.41471522951118,
+  "mean_half_life_lo": 33.714473168079024,
+  "mean_half_life_hi": 62.57609985294753,
+  "median_half_life": 30.846907621724522,
+  "share_adf_rejects_unit_root": 0.08597285067873303,
+  "share_kpss_rejects_stationarity": 0.9004524886877828
+ },
+ "regimes": [
+  {
+   "label": "rETH/WETH 0.05%",
+   "regime": "full",
+   "n_days": 1723,
+   "ar1_phi": 0.9988005111435417,
+   "ar1_half_life": 577.5221524685063,
+   "ar2_phi1": 0.8451829564154946,
+   "ar2_phi2": 0.1536756793414436,
+   "ar2_persistence": 0.9988586357569382,
+   "ar2_half_life": 606.9504479196564,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(2)",
+   "adf_p": 0.5733163830155907,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "rETH/WETH 0.05%",
+   "regime": "pre_split",
+   "n_days": 143,
+   "ar1_phi": 0.8720419114882983,
+   "ar1_half_life": 5.062506248630785,
+   "ar2_phi1": 0.7520897305384918,
+   "ar2_phi2": 0.13713028492942891,
+   "ar2_persistence": 0.8892200154679207,
+   "ar2_half_life": 5.903617336363453,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.09046827615793035,
+   "kpss_p": 0.09482904588679773
+  },
+  {
+   "label": "rETH/WETH 0.05%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9984473559332304,
+   "ar1_half_life": 446.0835233257464,
+   "ar2_phi1": 0.8645149196296074,
+   "ar2_phi2": 0.13382323244045968,
+   "ar2_persistence": 0.998338152070067,
+   "ar2_half_life": 416.7475590425068,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(2)",
+   "adf_p": 0.09672051475093346,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "rETH/WETH 0.05%",
+   "q": 2,
+   "variance_ratio": 0.8470207678697076,
+   "z_robust": -0.0463822984964725,
+   "p_value": 0.9630055450808617
+  },
+  {
+   "label": "rETH/WETH 0.05%",
+   "q": 5,
+   "variance_ratio": 0.6301876409614957,
+   "z_robust": -0.06199451499615391,
+   "p_value": 0.9505672000002421
+  },
+  {
+   "label": "rETH/WETH 0.05%",
+   "q": 10,
+   "variance_ratio": 0.5637317465328406,
+   "z_robust": -0.05509562555907304,
+   "p_value": 0.9560622811513393
+  },
+  {
+   "label": "rETH/WETH 0.05%",
+   "q": 20,
+   "variance_ratio": 0.4538707457547003,
+   "z_robust": -0.052731951466454374,
+   "p_value": 0.9579454808439631
+  }
+ ]
+}

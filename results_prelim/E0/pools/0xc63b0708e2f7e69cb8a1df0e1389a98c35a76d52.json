@@ -1,0 +1,58 @@
+[
+ {
+  "position_id": "184997",
+  "start_ts": 1642761720,
+  "end_ts": 1644760574,
+  "hours": 555.2372222222,
+  "liquidity": 1.000006996e+16,
+  "pool": "0xc63b0708e2f7e69cb8a1df0e1389a98c35a76d52",
+  "label": "FRAX/USDC 0.05%",
+  "category": "stable-stable",
+  "onchain_token1": 0.0,
+  "predicted_token1": 0.0244835554,
+  "stale": true,
+  "rel_error": null
+ },
+ {
+  "position_id": "237918",
+  "start_ts": 1652354606,
+  "end_ts": 1653347338,
+  "hours": 275.7588888889,
+  "liquidity": 1.969559084e+17,
+  "pool": "0xc63b0708e2f7e69cb8a1df0e1389a98c35a76d52",
+  "label": "FRAX/USDC 0.05%",
+  "category": "stable-stable",
+  "onchain_token1": 0.0,
+  "predicted_token1": 24.5661378903,
+  "stale": true,
+  "rel_error": null
+ },
+ {
+  "position_id": "237918",
+  "start_ts": 1653347338,
+  "end_ts": 1762367711,
+  "hours": 30283.4369444444,
+  "liquidity": 1.969559084e+17,
+  "pool": "0xc63b0708e2f7e69cb8a1df0e1389a98c35a76d52",
+  "label": "FRAX/USDC 0.05%",
+  "category": "stable-stable",
+  "onchain_token1": 132.0827013153,
+  "predicted_token1": 107.5643314084,
+  "stale": false,
+  "rel_error": -0.1856289254
+ },
+ {
+  "position_id": "237918",
+  "start_ts": 1762367711,
+  "end_ts": 1774632083,
+  "hours": 3406.77,
+  "liquidity": 1.969559084e+17,
+  "pool": "0xc63b0708e2f7e69cb8a1df0e1389a98c35a76d52",
+  "label": "FRAX/USDC 0.05%",
+  "category": "stable-stable",
+  "onchain_token1": 267.7307662083,
+  "predicted_token1": 267.7419351762,
+  "stale": false,
+  "rel_error": 4.17172e-05
+ }
+]

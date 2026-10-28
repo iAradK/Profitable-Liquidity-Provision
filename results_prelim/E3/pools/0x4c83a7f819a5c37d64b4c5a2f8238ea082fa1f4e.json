@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "CRV/WETH 1.00%",
+  "category": "high-vol",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.027237354085603127,
+  "mean_phi": 0.9731395299764948,
+  "mean_phi_lo": 0.9667376147144618,
+  "mean_phi_hi": 0.9815480640636399,
+  "mean_half_life": 49.093636820523145,
+  "mean_half_life_lo": 36.47969210335041,
+  "mean_half_life_hi": 70.70614076860603,
+  "median_half_life": 30.31322171493373,
+  "share_adf_rejects_unit_root": 0.054474708171206226,
+  "share_kpss_rejects_stationarity": 0.8132295719844358
+ },
+ "regimes": [
+  {
+   "label": "CRV/WETH 1.00%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9984772633873819,
+   "ar1_half_life": 454.8516798563128,
+   "ar2_phi1": 1.0284731777030638,
+   "ar2_phi2": -0.030095452946666934,
+   "ar2_persistence": 0.9983777247563969,
+   "ar2_half_life": 426.92187617019533,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.6365784137772784,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "CRV/WETH 1.00%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 0.9767550396695358,
+   "ar1_half_life": 29.47131346791358,
+   "ar2_phi1": 1.0475888111364742,
+   "ar2_phi2": -0.07217296017633656,
+   "ar2_persistence": 0.9754158509601376,
+   "ar2_half_life": 27.846870613740766,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.24535153406281962,
+   "kpss_p": 0.033228200067999175
+  },
+  {
+   "label": "CRV/WETH 1.00%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9975230274027413,
+   "ar1_half_life": 279.48971789443834,
+   "ar2_phi1": 1.013167227008652,
+   "ar2_phi2": -0.015822808908224184,
+   "ar2_persistence": 0.9973444181004278,
+   "ar2_half_life": 260.6684501917725,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.4540243541538879,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "CRV/WETH 1.00%",
+   "q": 2,
+   "variance_ratio": 1.0293997931368384,
+   "z_robust": 0.022352366300254174,
+   "p_value": 0.9821668770327379
+  },
+  {
+   "label": "CRV/WETH 1.00%",
+   "q": 5,
+   "variance_ratio": 0.9917812960927749,
+   "z_robust": -0.0028593310218295322,
+   "p_value": 0.9977185870321774
+  },
+  {
+   "label": "CRV/WETH 1.00%",
+   "q": 10,
+   "variance_ratio": 0.9816847685747351,
+   "z_robust": -0.004233479610890856,
+   "p_value": 0.9966221820697384
+  },
+  {
+   "label": "CRV/WETH 1.00%",
+   "q": 20,
+   "variance_ratio": 1.0133426546712034,
+   "z_robust": 0.002184918970531661,
+   "p_value": 0.9982566882738652
+  }
+ ]
+}

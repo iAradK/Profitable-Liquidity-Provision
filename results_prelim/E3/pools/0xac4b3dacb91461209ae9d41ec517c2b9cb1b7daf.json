@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "APE/WETH 0.30%",
+  "category": "high-vol",
+  "n_days": 1684,
+  "n_windows": 215,
+  "n_constant_windows": 0,
+  "share_excluded": 0.1348837209302326,
+  "mean_phi": 0.9709193574647308,
+  "mean_phi_lo": 0.9656525524775353,
+  "mean_phi_hi": 0.9811865624013881,
+  "mean_half_life": 59.36397782665626,
+  "mean_half_life_lo": 41.782469953226595,
+  "mean_half_life_hi": 91.6297544963489,
+  "median_half_life": 25.172570071589206,
+  "share_adf_rejects_unit_root": 0.046511627906976744,
+  "share_kpss_rejects_stationarity": 0.8697674418604651
+ },
+ "regimes": [
+  {
+   "label": "APE/WETH 0.30%",
+   "regime": "full",
+   "n_days": 1684,
+   "ar1_phi": 0.9994147171972755,
+   "ar1_half_life": NaN,
+   "ar2_phi1": 0.9531216479202594,
+   "ar2_phi2": 0.04638778029235402,
+   "ar2_persistence": 0.9995094282126135,
+   "ar2_half_life": NaN,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.9012933044855873,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "APE/WETH 0.30%",
+   "regime": "pre_split",
+   "n_days": 104,
+   "ar1_phi": 0.9035095522953572,
+   "ar1_half_life": 6.83114978174846,
+   "ar2_phi1": 0.7559829391221367,
+   "ar2_phi2": 0.16603978818390425,
+   "ar2_persistence": 0.9220227273060408,
+   "ar2_half_life": 8.537829852407844,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.2797638746286509,
+   "kpss_p": 0.08672305753034441
+  },
+  {
+   "label": "APE/WETH 0.30%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9992555922618794,
+   "ar1_half_life": NaN,
+   "ar2_phi1": 1.0007449652105973,
+   "ar2_phi2": -0.0014834617977429465,
+   "ar2_persistence": 0.9992615034128544,
+   "ar2_half_life": NaN,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.7693023429364233,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "APE/WETH 0.30%",
+   "q": 2,
+   "variance_ratio": 0.9525582277042837,
+   "z_robust": -0.019092697606801677,
+   "p_value": 0.9847671568352613
+  },
+  {
+   "label": "APE/WETH 0.30%",
+   "q": 5,
+   "variance_ratio": 0.851007496942443,
+   "z_robust": -0.03166947045166502,
+   "p_value": 0.9747356417189765
+  },
+  {
+   "label": "APE/WETH 0.30%",
+   "q": 10,
+   "variance_ratio": 0.8103640157718012,
+   "z_robust": -0.03060689199145041,
+   "p_value": 0.9755830457119169
+  },
+  {
+   "label": "APE/WETH 0.30%",
+   "q": 20,
+   "variance_ratio": 0.7569016899226919,
+   "z_robust": -0.03031579252866974,
+   "p_value": 0.9758152017450967
+  }
+ ]
+}

@@ -1,0 +1,189 @@
+# Settings for download_subgraph.py (Uniswap v3 Ethereum mainnet subgraph download).
+# The Graph API key goes in secrets.toml (copy secrets.example.toml), not here.
+
+[run]
+# introspect | meta | hourly | daily | positions | prices | report | all
+# "all" = introspect, meta, hourly, daily, positions, prices, report
+step = "all"
+# Subset of pool addresses to process; empty = every pool in [universe] below
+only_pools = []
+# Re-run schema introspection even if pool_data/meta/schema.json is cached ("all" always refreshes)
+refresh_schema = false
+
+[subgraph]
+host = "https://gateway.thegraph.com"
+subgraph_id = "5zvR82QoaXYFyDEKLZ9t6v9adgnptxYpKpSbxtgVENFV"
+
+[download]
+output_dir = "pool_data"
+start_date = 2021-05-05
+end_date = 2026-11-01          # exclusive
+page_size = 1000               # The Graph maximum per query
+max_positions = 1000           # full-range positions per pool
+snapshot_chunk = 100           # positions per positionSnapshots query
+checkpoint_every = 5           # save hourly data every N pages
+force_refresh = false          # true = ignore saved data and download everything again
+
+[network]
+max_workers = 4                # pools/tokens downloaded concurrently
+max_retries = 8
+min_interval_seconds = 0.2     # minimum gap between requests across all workers
+timeout_seconds = 90
+
+[report]
+# Existing poolDayDatas (daily closes) used for the spot check
+daily_close_dir = "old/pool_data/updated"
+max_workers = 4                # processes for the per-pool sanity/spot-check analysis
+
+[universe]
+# 27 pools, Ethereum mainnet, Uniswap v3
+pools = [
+    { category = "stable-volatile", label = "WETH/USDT 0.30%", address = "0x4e68ccd3e89f51c3074ca5072bbac773960dfa36" },
+    { category = "stable-volatile", label = "WETH/USDT 0.05%", address = "0x11b815efb8f581194ae79006d24e0d814b7697f6" },
+    { category = "stable-volatile", label = "WBTC/USDT 0.30%", address = "0x9db9e0e53058c89e5b94e29621a205198648425b" },
+    { category = "stable-volatile", label = "USDC/WETH 0.05%", address = "0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640" },
+    { category = "stable-volatile", label = "USDC/WETH 0.30%", address = "0x8ad599c3a0ff1de082011efddc58f1908eb6e6d8" },
+    { category = "stable-volatile", label = "WBTC/USDC 0.30%", address = "0x99ac8ca7087fa4a2a1fb6357269965a2014abc35" },
+    { category = "stable-volatile", label = "USDC/WETH 1.00%", address = "0x7bea39867e4169dbe237d55c8242a8f2fcdcc387" },
+    { category = "stable-volatile", label = "WBTC/USDC 0.05%", address = "0x9a772018fbd77fcd2d25657e5c547baff3fd7d16" },
+    { category = "stable-volatile", label = "DAI/WETH 0.30%", address = "0xc2e9f25be6257c210d7adf0d4cd6e3e881ba25f8" },
+    { category = "stable-stable", label = "USDC/USDT 0.01%", address = "0x3416cf6c708da44db2624d63ea0aaef7113527c6" },
+    { category = "stable-stable", label = "DAI/USDC 0.01%", address = "0x5777d92f208679db4b9778590fa3cab3ac9e2168" },
+    { category = "stable-stable", label = "FRAX/USDC 0.05%", address = "0xc63b0708e2f7e69cb8a1df0e1389a98c35a76d52" },
+    { category = "correlated", label = "WBTC/WETH 0.05%", address = "0x4585fe77225b41b697c938b018e2ac67ac5a20c0" },
+    { category = "correlated", label = "WBTC/WETH 0.30%", address = "0xcbcdf9626bc03e24f779434178a73a0b4bad62ed" },
+    { category = "correlated", label = "wstETH/WETH 0.01%", address = "0x109830a1aaad605bbf02a9dfa7b0b92ec2fb7daa" },
+    { category = "correlated", label = "rETH/WETH 0.05%", address = "0xa4e0faa58465a2d369aa21b3e42d43374c6f9613" },
+    { category = "correlated", label = "cbETH/WETH 0.05%", address = "0x840deeef2f115cf50da625f7368c24af6fe74410" },
+    { category = "governance", label = "AAVE/WETH 0.30%", address = "0x5ab53ee1d50eef2c1dd3d5402789cd27bb52c1bb" },
+    { category = "governance", label = "LINK/WETH 0.30%", address = "0xa6cc3c2531fdaa6ae1a3ca84c2855806728693e8" },
+    { category = "governance", label = "UNI/WETH 0.30%", address = "0x1d42064fc4beb5f8aaf85f4617ae8b3b5b8bd801" },
+    { category = "governance", label = "MKR/WETH 0.30%", address = "0xe8c6c9227491c0a8156a0106a0204d881bb7e531" },
+    { category = "governance", label = "LDO/WETH 0.30%", address = "0xa3f558aebaecaf0e11ca4b2199cc5ed341edfd74" },
+    { category = "governance", label = "CRV/WETH 0.30%", address = "0x919fa96e88d67499339577fa202345436bcdaf79" },
+    { category = "high-vol", label = "APE/WETH 0.30%", address = "0xac4b3dacb91461209ae9d41ec517c2b9cb1b7daf" },
+    { category = "high-vol", label = "SHIB/WETH 0.30%", address = "0x2f62f2b4c5fcd7570a709dec05d68ea19c82a9ec" },
+    { category = "high-vol", label = "PEPE/WETH 0.30%", address = "0x11950d141ecb863f01007add7d1a342041227b58" },
+    { category = "high-vol", label = "CRV/WETH 1.00%", address = "0x4c83a7f819a5c37d64b4c5a2f8238ea082fa1f4e" },
+]
+
+
+# ======================================================================
+# Settings for run_experiments.py (experiments E0-E11). The pools are the
+# [universe] above; the data is what download_subgraph.py saved.
+# ======================================================================
+[experiments]
+# Experiments to run, in order. Each one writes to <output_dir>/<id>/ and is skipped
+# on the next run once it finished (delete its folder or set force_refresh to redo it).
+run = ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11"]
+output_dir = "results_prelim"
+force_refresh = false          # true = ignore finished experiments and cached intermediate files
+max_workers = 6                # processes for per-pool / per-grid-cell work
+seed = 20270101                # random seed for bootstraps and random selection
+
+[experiments.data]
+data_dir = "pool_data"
+# BigQuery exports (Query 1: daily gas cost of LP entry/exit; Query 3: Swap logs). "" = not available.
+gas_file = "pool_data/bigquery/script_job_4f5d1c6feed1ce61b406c406030dafe6_0.csv"
+swaps_file = "pool_data/bigquery/bq-results-20261027-055450-1793080502742.csv"
+eth_token = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"   # WETH, prices gas costs in USD
+
+[experiments.sample]
+start = 2021-06-01             # first period start
+end = 2026-11-01               # exclusive; periods past the last downloaded hour are dropped
+first_decision = 2022-06-01    # first out-of-sample selection decision
+regime_split = 2022-07-01      # E3 structural split
+# Subperiod windows reported in E5 (calendar years are added automatically)
+event_windows = [
+    { name = "Terra collapse", start = 2022-05-01, end = 2022-07-01 },
+    { name = "FTX collapse", start = 2022-11-01, end = 2022-12-01 },
+    { name = "USDC depeg", start = 2023-03-01, end = 2023-04-01 },
+]
+
+[experiments.eligibility]
+min_history_months = 12        # months of history before a pool can be selected
+min_tvl_usd = 1_000_000        # TVL at the decision time
+
+[experiments.costs]
+capital_usd = 100_000          # total capital, split equally over the pools held
+entry_swap_fraction = 0.5      # share of a new position swapped (at the pool's fee) to reach the token ratio
+include_gas = true             # charge the daily median gas cost of entry and exit
+
+[experiments.statistics]
+bootstrap_samples = 2000
+block_months = 3               # moving-block length for monthly series
+block_days = 30                # moving-block length for daily-start overlapping windows (>= window length)
+newey_west_lags = 3            # lags for the information-coefficient t-statistic
+confidence = 0.95
+min_pools_for_ic = 5           # months with fewer eligible pools get no information coefficient
+
+[experiments.selection]
+# E5 (main experiment)
+tail_quantile = 0.10           # Net90 = median fee + P10(IL)
+horizon = "1m"                 # "<n>m" months or "<n>d" days
+calibration_months = 12        # 0 = expanding window
+top_k = [1, 3, 5]
+strategies = ["net_tail", "fee_minus_lvr", "median_fee", "low_variance", "mean_net", "equal_weight", "hodl_5050", "hodl_eth"]
+random_draws = 1000            # random top-k portfolios for the permutation baseline
+# Risk-aversion grid for fee - sigma^2/8 - lambda * tail, the tail being the model-based tail_quantile IL loss
+# (strategies lvr_tail_<lambda>; lambda = 0 is fee_minus_lvr). Fixed in advance, not tuned on the results.
+risk_aversion = [0.1, 0.25, 0.5, 1, 2, 5]
+
+[experiments.sensitivity]
+# E6 grid (every combination is one backtest)
+tail_quantiles = [0.05, 0.10, 0.20]
+horizons = ["14d", "1m", "2m"]
+calibration_months = [6, 12, 0]
+top_k = [1, 3, 5]
+
+[experiments.persistence]
+# E3
+window_days = 180              # rolling AR(1) window (as in the paper)
+step_days = 7                  # step between rolling windows
+phi_max = 0.999                # windows with phi outside (0, phi_max) are excluded
+variance_ratio_lags = [2, 5, 10, 20]
+test_alpha = 0.05
+
+[experiments.calibration]
+# E4
+min_train_months = 12
+rolling_months = 12
+
+[experiments.horizon_matching]
+# E7
+fixed_months = [1, 2, 3]
+max_months = 3                 # half-life-matched horizon is clipped to [1, max_months]
+window_days = 180              # trailing window for the half-life estimate at each decision
+top_k = 3                      # pools selected by Net90 at each decision
+
+[experiments.concentrated]
+# E8
+half_widths = [0.01, 0.05, 0.10, 0.20]    # +-w around the entry price
+sigma_multiples = [1.0, 2.0, 3.0]          # +-k * trailing monthly sigma of the log price
+validation_pools = ["0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640", "0xa6cc3c2531fdaa6ae1a3ca84c2855806728693e8"]
+validation_start = 2024-01-01  # swap-level validation window (must match BigQuery Query 3)
+validation_end = 2024-07-01
+plot_risk_aversion = [0, 0.25, 1]           # lambdas shown in ic_vs_range (every lambda is in ic_by_range.csv)
+
+[experiments.fee_validation]
+# E0
+min_interval_hours = 24        # shorter snapshot intervals are dominated by the hourly granularity
+tolerance = 0.05               # share of intervals within +-5% is reported
+
+[experiments.replication]
+# E11: same pipeline on another network. Skipped until this folder exists
+# (same layout as pool_data: hourly/, meta/, token_prices/).
+data_dir = "pool_data_arbitrum"
+gas_file = ""                  # "" = no gas cost (negligible on Arbitrum)
+eth_token = "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"   # WETH on Arbitrum
+
+
+# ======================================================================
+# Settings for make_paper_assets.py (LaTeX tables, number macros and figures for the ICBC paper)
+# ======================================================================
+[paper]
+results_dir = "results_prelim"       # switch to "results" for the final run after Nov 1
+output_dir = "overleaf/generated"    # \input{generated/...} in overleaf/main_icbc2027.tex
+sensitivity_k = 3                    # top-k whose E6 sensitivity heatmap goes into the paper
+main_k = 3                           # top-k quoted in the abstract
+abstract_lambda = 0.25               # the "moderate" tail penalty quoted in the abstract (must be in risk_aversion)

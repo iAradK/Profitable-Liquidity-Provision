@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "LINK/WETH 0.30%",
+  "category": "governance",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.023346303501945553,
+  "mean_phi": 0.9704673003710521,
+  "mean_phi_lo": 0.9625577045486838,
+  "mean_phi_hi": 0.9767354954383222,
+  "mean_half_life": 41.34054656086292,
+  "mean_half_life_lo": 28.973356580655633,
+  "mean_half_life_hi": 55.19070668479679,
+  "median_half_life": 27.47579301438278,
+  "share_adf_rejects_unit_root": 0.054474708171206226,
+  "share_kpss_rejects_stationarity": 0.8365758754863813
+ },
+ "regimes": [
+  {
+   "label": "LINK/WETH 0.30%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9900918496262053,
+   "ar1_half_life": 69.61012423276537,
+   "ar2_phi1": 1.0033121173625426,
+   "ar2_phi2": -0.013258118554723586,
+   "ar2_persistence": 0.990053998807819,
+   "ar2_half_life": 69.34389040199565,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.012561502860974702,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "LINK/WETH 0.30%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 0.98670936848035,
+   "ar1_half_life": 51.80571939729961,
+   "ar2_phi1": 1.0528087852649746,
+   "ar2_phi2": -0.0661588868009022,
+   "ar2_persistence": 0.9866498984640724,
+   "ar2_half_life": 51.57339231398946,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.42170353864666327,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "LINK/WETH 0.30%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9907753523049753,
+   "ar1_half_life": 74.79366649720087,
+   "ar2_phi1": 0.9843209737815047,
+   "ar2_phi2": 0.006563766237301372,
+   "ar2_persistence": 0.9908847400188061,
+   "ar2_half_life": 75.69540004955176,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.14877109143714318,
+   "kpss_p": 0.08203050388055128
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "LINK/WETH 0.30%",
+   "q": 2,
+   "variance_ratio": 1.01132554998079,
+   "z_robust": 0.008223168286708063,
+   "p_value": 0.9934389349269817
+  },
+  {
+   "label": "LINK/WETH 0.30%",
+   "q": 5,
+   "variance_ratio": 0.9924966716680187,
+   "z_robust": -0.002514183126515712,
+   "p_value": 0.9979939742137095
+  },
+  {
+   "label": "LINK/WETH 0.30%",
+   "q": 10,
+   "variance_ratio": 0.9567456074819983,
+   "z_robust": -0.009572811576883328,
+   "p_value": 0.9923621180937968
+  },
+  {
+   "label": "LINK/WETH 0.30%",
+   "q": 20,
+   "variance_ratio": 1.0264940189639162,
+   "z_robust": 0.004064675624101477,
+   "p_value": 0.9967568670051447
+  }
+ ]
+}

@@ -1,0 +1,30 @@
+[
+ {
+  "position_id": "880930",
+  "start_ts": 1734791963,
+  "end_ts": 1735818167,
+  "hours": 285.0566666667,
+  "liquidity": 1.435953586e+18,
+  "pool": "0x840deeef2f115cf50da625f7368c24af6fe74410",
+  "label": "cbETH/WETH 0.05%",
+  "category": "correlated",
+  "onchain_token1": 1.82444e-05,
+  "predicted_token1": 1.8259e-05,
+  "stale": false,
+  "rel_error": 0.0007958702
+ },
+ {
+  "position_id": "995564",
+  "start_ts": 1748031455,
+  "end_ts": 1748133191,
+  "hours": 28.26,
+  "liquidity": 1.950238871e+18,
+  "pool": "0x840deeef2f115cf50da625f7368c24af6fe74410",
+  "label": "cbETH/WETH 0.05%",
+  "category": "correlated",
+  "onchain_token1": 1.03844e-05,
+  "predicted_token1": 1.0369e-05,
+  "stale": false,
+  "rel_error": -0.0014874828
+ }
+]

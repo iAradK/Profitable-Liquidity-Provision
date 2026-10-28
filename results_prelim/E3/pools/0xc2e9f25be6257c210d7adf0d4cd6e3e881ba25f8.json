@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "DAI/WETH 0.30%",
+  "category": "stable-volatile",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.04280155642023342,
+  "mean_phi": 0.9747722329689272,
+  "mean_phi_lo": 0.9676876110774593,
+  "mean_phi_hi": 0.9808962204538338,
+  "mean_half_life": 51.575726879968336,
+  "mean_half_life_lo": 36.431103766193814,
+  "mean_half_life_hi": 71.41389848768043,
+  "median_half_life": 32.00527542519702,
+  "share_adf_rejects_unit_root": 0.0311284046692607,
+  "share_kpss_rejects_stationarity": 0.8715953307392996
+ },
+ "regimes": [
+  {
+   "label": "DAI/WETH 0.30%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9942827248997238,
+   "ar1_half_life": 120.8904274105584,
+   "ar2_phi1": 0.9737894983023919,
+   "ar2_phi2": 0.020624517269994147,
+   "ar2_persistence": 0.9944140155723861,
+   "ar2_half_life": 123.73994725871584,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.14617669485130763,
+   "kpss_p": 0.010170868953626431
+  },
+  {
+   "label": "DAI/WETH 0.30%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 1.0012572954071473,
+   "ar1_half_life": NaN,
+   "ar2_phi1": 0.9942861731221473,
+   "ar2_phi2": 0.007083723907572503,
+   "ar2_persistence": 1.0013698970297198,
+   "ar2_half_life": NaN,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.970815445900184,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "DAI/WETH 0.30%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9932030713785642,
+   "ar1_half_life": 101.63250277532381,
+   "ar2_phi1": 0.9626439891691989,
+   "ar2_phi2": 0.030599818512513255,
+   "ar2_persistence": 0.9932438076817122,
+   "ar2_half_life": 102.24738796918174,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.08294156234054989,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "DAI/WETH 0.30%",
+   "q": 2,
+   "variance_ratio": 0.9774396730143136,
+   "z_robust": -0.016704514638663313,
+   "p_value": 0.9866723455035703
+  },
+  {
+   "label": "DAI/WETH 0.30%",
+   "q": 5,
+   "variance_ratio": 0.9841517889295031,
+   "z_robust": -0.005567048380202336,
+   "p_value": 0.9955581609918054
+  },
+  {
+   "label": "DAI/WETH 0.30%",
+   "q": 10,
+   "variance_ratio": 0.9948355255933848,
+   "z_robust": -0.0012391817691205142,
+   "p_value": 0.999011276251433
+  },
+  {
+   "label": "DAI/WETH 0.30%",
+   "q": 20,
+   "variance_ratio": 1.030030926763499,
+   "z_robust": 0.005175298576495838,
+   "p_value": 0.9958707276011532
+  }
+ ]
+}

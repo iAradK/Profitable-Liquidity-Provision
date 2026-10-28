@@ -1,0 +1,17 @@
+{
+ "horizon": "14d",
+ "tail_quantile": 0.05,
+ "calibration_months": 0,
+ "k": 1,
+ "n_decisions": 114,
+ "mean_excess_net_tail": 2.7182201286404948e-05,
+ "mean_excess_fee_minus_lvr": 0.002918912070549208,
+ "mean_excess_equal_weight": 0.00044279086667130854,
+ "diff_vs_fee_minus_lvr": -0.002891729869262802,
+ "diff_lo": -0.005778535834011388,
+ "diff_hi": -0.0006073772158013102,
+ "diff_p": 0.03,
+ "diff_per_month": -0.006286930563977609,
+ "ic_mean": -0.2803691938279897,
+ "ic_nw_t": -8.586620490576047
+}

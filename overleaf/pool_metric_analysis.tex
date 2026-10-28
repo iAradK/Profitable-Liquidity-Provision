@@ -1,0 +1,42 @@
+\begin{tikzpicture}
+\begin{axis}[
+    width=1.4\textwidth,
+    height=0.41\textwidth,
+    ybar,
+    bar width=6pt,
+    enlarge x limits=0.18,
+    ymin=-2.2, ymax=0.1,
+    ymajorgrids=true,
+    grid style={dotted},
+    ylabel={Impermanent Loss (\%)},
+    symbolic x coords={45,cb,4e,11,9d,5a,a6,1d},
+    xtick=data,
+    xticklabel style={rotate=45, anchor=east},
+    legend style={
+        at={(0.01,0.02)},
+        anchor=south west,
+        draw=black,
+        fill=white,
+        %font=\Large,
+    },
+    legend cell align={left},
+]
+
+% IL_median
+\addplot[draw=blue!70!black, fill=blue!25, bar shift=-12pt] coordinates { (45,-0.062025) (cb,-0.053979) (4e,-0.184368) (11,-0.179866) (9d,-0.133229) (5a,-0.127624) (a6,-0.191402) (1d,-0.217280) };
+\addlegendentry{$\mathrm{IL}_{\text{median}}$}
+
+% IL_bound (5--95)
+\addplot[draw=red!70!black, fill=red!25, bar shift=-4pt] coordinates { (45,-0.698558) (cb,-0.708234) (4e,-1.867968) (11,-1.879260) (9d,-1.420822) (5a,-1.353484) (a6,-1.269196) (1d,-1.191524) };
+\addlegendentry{$\mathrm{IL}_{\text{bound}}~(5\text{--}95)$}
+
+% IL_sigma-bound
+\addplot[draw=brown!70!black, fill=brown!20, bar shift=4pt] coordinates { (45,-0.343281) (cb,-0.342155) (4e,-1.173647) (11,-1.166907) (9d,-0.655256) (5a,-0.770508) (a6,-0.683694) (1d,-0.786992) };
+\addlegendentry{$\mathrm{IL}_{\sigma\text{--}\text{bound}}$}
+
+% IL_mean
+\addplot[draw=black, fill=black!45, bar shift=12pt] coordinates { (45,-0.102314) (cb,-0.102141) (4e,-0.367057) (11,-0.366243) (9d,-0.207247) (5a,-0.240038) (a6,-0.242804) (1d,-0.272718) };
+\addlegendentry{$\mathrm{IL}_{\text{mean}}$}
+
+\end{axis}
+\end{tikzpicture}

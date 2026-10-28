@@ -1,0 +1,81 @@
+{
+ "summary": {
+  "label": "wstETH/WETH 0.01%",
+  "category": "correlated",
+  "n_days": 1523,
+  "n_windows": 192,
+  "n_constant_windows": 0,
+  "share_excluded": 0.078125,
+  "mean_phi": 0.9896916560830398,
+  "mean_phi_lo": 0.9855670713073765,
+  "mean_phi_hi": 0.9966252889408005,
+  "mean_half_life": 223.2509348116639,
+  "mean_half_life_lo": 184.55010091144925,
+  "mean_half_life_hi": 304.3439516223858,
+  "median_half_life": 172.63784945052862,
+  "share_adf_rejects_unit_root": 0.036458333333333336,
+  "share_kpss_rejects_stationarity": 1.0
+ },
+ "regimes": [
+  {
+   "label": "wstETH/WETH 0.01%",
+   "regime": "full",
+   "n_days": 1523,
+   "ar1_phi": 0.9980668131212105,
+   "ar1_half_life": 358.2048794980267,
+   "ar2_phi1": 0.9888201543762835,
+   "ar2_phi2": 0.009163772079565424,
+   "ar2_persistence": 0.9979839264558489,
+   "ar2_half_life": 343.46377378326827,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.005418537759986423,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "wstETH/WETH 0.01%",
+   "regime": "post_split",
+   "n_days": 1523,
+   "ar1_phi": 0.9980668131212105,
+   "ar1_half_life": 358.2048794980267,
+   "ar2_phi1": 0.9888201543762835,
+   "ar2_phi2": 0.009163772079565424,
+   "ar2_persistence": 0.9979839264558489,
+   "ar2_half_life": 343.46377378326827,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.005418537759986423,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "wstETH/WETH 0.01%",
+   "q": 2,
+   "variance_ratio": 0.9922424557875779,
+   "z_robust": -0.004960706287311518,
+   "p_value": 0.9960419452763852
+  },
+  {
+   "label": "wstETH/WETH 0.01%",
+   "q": 5,
+   "variance_ratio": 0.4396696871108036,
+   "z_robust": -0.03766240590680882,
+   "p_value": 0.9699568504571677
+  },
+  {
+   "label": "wstETH/WETH 0.01%",
+   "q": 10,
+   "variance_ratio": 0.40001541764827603,
+   "z_robust": -0.025054930778932807,
+   "p_value": 0.9800111489134489
+  },
+  {
+   "label": "wstETH/WETH 0.01%",
+   "q": 20,
+   "variance_ratio": 0.3594077343959759,
+   "z_robust": -0.02173751555713864,
+   "p_value": 0.9826573377487564
+  }
+ ]
+}

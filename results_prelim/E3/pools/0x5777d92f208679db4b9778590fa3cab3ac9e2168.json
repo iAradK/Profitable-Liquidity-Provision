@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "DAI/USDC 0.01%",
+  "category": "stable-stable",
+  "n_days": 1809,
+  "n_windows": 233,
+  "n_constant_windows": 0,
+  "share_excluded": 0.0,
+  "mean_phi": 0.7760108817876656,
+  "mean_phi_lo": 0.7162324152919002,
+  "mean_phi_hi": 0.8661631857738671,
+  "mean_half_life": 4.97721712513402,
+  "mean_half_life_lo": 3.030052411999534,
+  "mean_half_life_hi": 7.286504530906763,
+  "median_half_life": 4.072922686476963,
+  "share_adf_rejects_unit_root": 0.6008583690987125,
+  "share_kpss_rejects_stationarity": 0.38626609442060084
+ },
+ "regimes": [
+  {
+   "label": "DAI/USDC 0.01%",
+   "regime": "full",
+   "n_days": 1809,
+   "ar1_phi": 0.6623490883263502,
+   "ar1_half_life": 1.6825490576431752,
+   "ar2_phi1": 0.5384435227539274,
+   "ar2_phi2": 0.14082960401607775,
+   "ar2_persistence": 0.6792731267700052,
+   "ar2_half_life": 1.7923192538774144,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(2)",
+   "adf_p": 4.6773330921680224e-08,
+   "kpss_p": 0.1
+  },
+  {
+   "label": "DAI/USDC 0.01%",
+   "regime": "pre_split",
+   "n_days": 229,
+   "ar1_phi": 0.4723674662782124,
+   "ar1_half_life": 0.9241986238930426,
+   "ar2_phi1": 0.30554512590167526,
+   "ar2_phi2": 0.07121733186276086,
+   "ar2_persistence": 0.3767624577644361,
+   "ar2_half_life": 0.7100896529505742,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(2)",
+   "adf_p": 0.17371227913287235,
+   "kpss_p": 0.044927703815059006
+  },
+  {
+   "label": "DAI/USDC 0.01%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.7351771118125965,
+   "ar1_half_life": 2.253083239965347,
+   "ar2_phi1": 0.6310613429948165,
+   "ar2_phi2": 0.1418005267288054,
+   "ar2_persistence": 0.7728618697236219,
+   "ar2_half_life": 2.690214983773102,
+   "aic_prefers": "AR(2)",
+   "bic_prefers": "AR(2)",
+   "adf_p": 3.358830039836133e-08,
+   "kpss_p": 0.1
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "DAI/USDC 0.01%",
+   "q": 2,
+   "variance_ratio": 0.6955073697243592,
+   "z_robust": -0.08765639806065148,
+   "p_value": 0.9301497754750615
+  },
+  {
+   "label": "DAI/USDC 0.01%",
+   "q": 5,
+   "variance_ratio": 0.3557954610624028,
+   "z_robust": -0.10610891881913212,
+   "p_value": 0.9154959349034798
+  },
+  {
+   "label": "DAI/USDC 0.01%",
+   "q": 10,
+   "variance_ratio": 0.21649156397505412,
+   "z_robust": -0.0889499136909478,
+   "p_value": 0.9291217153417015
+  },
+  {
+   "label": "DAI/USDC 0.01%",
+   "q": 20,
+   "variance_ratio": 0.12539362078222904,
+   "z_robust": -0.0771890282088641,
+   "p_value": 0.9384731698267411
+  }
+ ]
+}

@@ -1,0 +1,8 @@
+,mean
+n_eligible,24.9423
+spearman_net_tail_rv,0.814286
+same_top1_rv,0
+top3_overlap_rv,0.179487
+spearman_net_tail_farv,0.523108
+same_top1_farv,0.288462
+top3_overlap_farv,0.378205

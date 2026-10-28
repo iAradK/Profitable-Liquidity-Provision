@@ -1,0 +1,96 @@
+{
+ "summary": {
+  "label": "WETH/USDT 0.05%",
+  "category": "stable-volatile",
+  "n_days": 1975,
+  "n_windows": 257,
+  "n_constant_windows": 0,
+  "share_excluded": 0.04280155642023342,
+  "mean_phi": 0.9750941788942132,
+  "mean_phi_lo": 0.9674839445376056,
+  "mean_phi_hi": 0.9815256461928424,
+  "mean_half_life": 55.34842187120352,
+  "mean_half_life_lo": 37.8421363888385,
+  "mean_half_life_hi": 78.33707518966598,
+  "median_half_life": 32.32482412474599,
+  "share_adf_rejects_unit_root": 0.03501945525291829,
+  "share_kpss_rejects_stationarity": 0.867704280155642
+ },
+ "regimes": [
+  {
+   "label": "WETH/USDT 0.05%",
+   "regime": "full",
+   "n_days": 1975,
+   "ar1_phi": 0.9943301056038799,
+   "ar1_half_life": 121.90355488246416,
+   "ar2_phi1": 0.9774783580918516,
+   "ar2_phi2": 0.01695999705823703,
+   "ar2_persistence": 0.9944383551500886,
+   "ar2_half_life": 124.2829933064099,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.14891955917279692,
+   "kpss_p": 0.010083394378933828
+  },
+  {
+   "label": "WETH/USDT 0.05%",
+   "regime": "pre_split",
+   "n_days": 395,
+   "ar1_phi": 1.001139206557847,
+   "ar1_half_life": NaN,
+   "ar2_phi1": 0.9855335298608748,
+   "ar2_phi2": 0.015906866586029023,
+   "ar2_persistence": 1.0014403964469039,
+   "ar2_half_life": NaN,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.9697923176420827,
+   "kpss_p": 0.01
+  },
+  {
+   "label": "WETH/USDT 0.05%",
+   "regime": "post_split",
+   "n_days": 1580,
+   "ar1_phi": 0.9932996409852402,
+   "ar1_half_life": 103.10229789291542,
+   "ar2_phi1": 0.9716004038825503,
+   "ar2_phi2": 0.021698509599903493,
+   "ar2_persistence": 0.9932989134824538,
+   "ar2_half_life": 103.09106689208355,
+   "aic_prefers": "AR(1)",
+   "bic_prefers": "AR(1)",
+   "adf_p": 0.0862542747438339,
+   "kpss_p": 0.01
+  }
+ ],
+ "variance_ratio": [
+  {
+   "label": "WETH/USDT 0.05%",
+   "q": 2,
+   "variance_ratio": 0.9811532591958054,
+   "z_robust": -0.013763518782204137,
+   "p_value": 0.9890186475701953
+  },
+  {
+   "label": "WETH/USDT 0.05%",
+   "q": 5,
+   "variance_ratio": 0.9900526452598463,
+   "z_robust": -0.003463897612403631,
+   "p_value": 0.9972362151017811
+  },
+  {
+   "label": "WETH/USDT 0.05%",
+   "q": 10,
+   "variance_ratio": 1.0019925651806108,
+   "z_robust": 0.00047534879882250175,
+   "p_value": 0.9996207265467065
+  },
+  {
+   "label": "WETH/USDT 0.05%",
+   "q": 20,
+   "variance_ratio": 1.03807285151684,
+   "z_robust": 0.006537595471842631,
+   "p_value": 0.9947837906652007
+  }
+ ]
+}

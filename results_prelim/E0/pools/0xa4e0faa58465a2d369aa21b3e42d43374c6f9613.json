@@ -1,0 +1,44 @@
+[
+ {
+  "position_id": "211426",
+  "start_ts": 1648162596,
+  "end_ts": 1648264756,
+  "hours": 28.3777777778,
+  "liquidity": 5.050673932e+18,
+  "pool": "0xa4e0faa58465a2d369aa21b3e42d43374c6f9613",
+  "label": "rETH/WETH 0.05%",
+  "category": "correlated",
+  "onchain_token1": 2.76988e-05,
+  "predicted_token1": 2.75655e-05,
+  "stale": false,
+  "rel_error": -0.0048126799
+ },
+ {
+  "position_id": "482997",
+  "start_ts": 1680721523,
+  "end_ts": 1692434003,
+  "hours": 3253.4666666667,
+  "liquidity": 1.743988269e+17,
+  "pool": "0xa4e0faa58465a2d369aa21b3e42d43374c6f9613",
+  "label": "rETH/WETH 0.05%",
+  "category": "correlated",
+  "onchain_token1": 0.0001379819,
+  "predicted_token1": 0.0001379773,
+  "stale": false,
+  "rel_error": -3.32362e-05
+ },
+ {
+  "position_id": "951401",
+  "start_ts": 1742437547,
+  "end_ts": 1743602483,
+  "hours": 323.5933333333,
+  "liquidity": 5.313618764e+17,
+  "pool": "0xa4e0faa58465a2d369aa21b3e42d43374c6f9613",
+  "label": "rETH/WETH 0.05%",
+  "category": "correlated",
+  "onchain_token1": 2.0526e-06,
+  "predicted_token1": 2.0526e-06,
+  "stale": false,
+  "rel_error": 5.311e-07
+ }
+]

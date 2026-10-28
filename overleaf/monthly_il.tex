@@ -1,0 +1,129 @@
+\begin{tikzpicture}
+    \begin{axis}[
+      width=0.32\textwidth,
+      height=0.2\textheight,
+      xmin=1,
+      xmax=55,
+      % --- UPDATED LIMITS (Scaled by 100) ---
+      ymin=-4, 
+      ymax=0.1, 
+      xlabel={Month},
+      ylabel={Monthly IL},
+      xticklabel style={rotate=45, anchor=east, font=\tiny},
+      xtick=\empty,
+      extra x ticks={1,4,7,10,13,16,19,22,25,28,31,34,37,40,43,46,49,52,55},
+      extra x tick style={xticklabel style={rotate=45, anchor=east, font=\tiny}},
+      extra x tick labels={%
+        2021-06,2021-09,2021-12,%
+        2022-03,2022-06,2022-09,2022-12,%
+        2023-03,2023-06,2023-09,2023-12,%
+        2024-03,2024-06,2024-09,2024-12,%
+        2025-03,2025-06,2025-09,2025-12},
+      scaled y ticks=false,
+      % --- DATA FILTER (Multiplies y-values by 100) ---
+      y filter/.code={\pgfmathparse{\pgfmathresult*100}\pgfmathresult},
+      % --- UPDATED TICKS & LABELS ---
+      yticklabel style={/pgf/number format:fixed, /pgf/number format:precision=1},
+      yticklabel={\pgfmathprintnumber{\tick}\%}, % Adds the % sign
+      ytick={-4,-3.5,-3,-2.5,-2,-1.5,-1,-0.5,0},
+      grid=both,
+      legend style={
+        at={(1.31,0.02)},
+        anchor=south,
+        legend columns=1,
+        font=\tiny,
+        draw=black,
+        fill=white,
+        fill opacity=0.9,
+        text opacity=1,
+      },
+      legend cell align=left,
+    ]
+
+      % Data file: monthly_il/monthly_il.dat
+      % 45: WBTC/WETH 0.05%
+      \addplot+[
+        color=blue!85!black,
+        mark=x,
+        mark size=1.2pt,
+        line width=0.8pt
+      ] table[x=month,y=il_45] {monthly_il/monthly_il.dat};
+      \addlegendentry{45: WBTC/WETH 0.05\%}
+
+      % cb: WBTC/WETH 0.30%
+      \addplot+[
+        color=blue!35!white,
+        mark=pentagon*,
+        mark options={fill=blue!35!white},
+        mark size=1.2pt,
+        line width=0.8pt
+      ] table[x=month,y=il_cb] {monthly_il/monthly_il.dat};
+      \addlegendentry{cb: WBTC/WETH 0.30\%}
+
+      % 4e: WETH/USDT 0.30%
+      \addplot+[
+        color=green!60!black,
+        mark=*,
+        mark options={fill=green!60!black},
+        mark size=1.2pt,
+        line width=0.8pt
+      ] table[x=month,y=il_4e] {monthly_il/monthly_il.dat};
+      \addlegendentry{4e: WETH/USDT 0.30\%}
+
+      % 11: WETH/USDT 0.05%
+      \addplot+[
+        color=green!25!black,
+        mark=diamond*,
+        mark options={fill=green!25!black},
+        mark size=1.2pt,
+        line width=0.8pt
+      ] table[x=month,y=il_11] {monthly_il/monthly_il.dat};
+      \addlegendentry{11: WETH/USDT 0.05\%}
+
+      % 9d: WBTC/USDT 0.30%
+      \addplot+[
+        color=violet!75!black,
+        mark=triangle*,
+        mark options={fill=violet!75!black},
+        mark size=1.2pt,
+        line width=0.8pt
+      ] table[x=month,y=il_9d] {monthly_il/monthly_il.dat};
+      \addlegendentry{9d: WBTC/USDT 0.30\%}
+
+      % 5a: AAVE/WETH 0.30%
+      \addplot+[
+        color=purple!75!black,
+        mark=square*,
+        mark options={fill=purple!75!black},
+        dashed,
+        mark size=1.2pt,
+        line width=0.8pt
+      ] table[x=month,y=il_5a] {monthly_il/monthly_il.dat};
+      \addlegendentry{5a: AAVE/WETH 0.30\%}
+
+      % a6: LINK/WETH 0.30%
+      \addplot+[
+        color=orange!85!black,
+        mark=star,
+        mark options={fill=orange!85!black},
+        mark size=1.6pt,
+        line width=0.8pt
+      ] table[x=month,y=il_a6] {monthly_il/monthly_il.dat};
+      \addlegendentry{a6: LINK/WETH 0.30\%}
+
+      % 1d: UNI/WETH 0.30%
+      \addplot+[
+        color=cyan!80!black,
+        mark=otimes*,
+        mark options={fill=cyan!80!black},
+        mark size=1.2pt,
+        line width=0.8pt
+      ] table[x=month,y=il_1d] {monthly_il/monthly_il.dat};
+      \addlegendentry{1d: UNI/WETH 0.30\%}
+
+      % zero line for reference
+      % Note: 0 scaled by 100 is still 0
+      \addplot[black, thick] coordinates {(1,0) (55,0)};
+
+    \end{axis}
+\end{tikzpicture}
