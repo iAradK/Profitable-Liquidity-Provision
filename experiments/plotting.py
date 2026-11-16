@@ -16,9 +16,9 @@ GRID = "#e4e3df"
 NEUTRAL_MID = "#f0efec"
 
 CATEGORY_ORDER = ("stable-volatile", "stable-stable", "correlated", "governance", "high-vol")
-STRATEGY_ORDER = ("net_tail", "fee_minus_lvr", "median_fee", "low_variance", "mean_net", "equal_weight", "rv", "farv")
+STRATEGY_ORDER = ("net_tail", "fee_minus_lvr", "median_fee", "fee_low_variance", "low_variance", "mean_net", "equal_weight", "rv", "farv")
 STRATEGY_LABELS = {
-    "net_tail": "Net90", "fee_minus_lvr": "Fee − σ²/8", "median_fee": "Highest median fee",
+    "net_tail": "Net90", "fee_minus_lvr": "Fee − σ²/8", "median_fee": "Highest median fee", "fee_low_variance": "Median fee, low σ²",
     "low_variance": "Lowest σ² (LVR)", "mean_net": "Mean net", "equal_weight": "Equal weight",
     "rv": "RV", "farv": "FARV", "hodl_5050": "HODL 50/50", "hodl_eth": "HODL ETH",
 }

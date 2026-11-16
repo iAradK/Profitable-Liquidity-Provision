@@ -75,8 +75,8 @@ pools = [
 [experiments]
 # Experiments to run, in order. Each one writes to <output_dir>/<id>/ and is skipped
 # on the next run once it finished (delete its folder or set force_refresh to redo it).
-run = ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11"]
-output_dir = "results_prelim"
+run = ["E0", "E1", "E2", "E3", "E4", "E5", "E6", "E7", "E8", "E9", "E10", "E11", "E12", "E13", "E14"]
+output_dir = "results_v2"       # fee crediting rules (no daily cap); results/ = daily-cap run on data through Oct 31
 force_refresh = false          # true = ignore finished experiments and cached intermediate files
 max_workers = 6                # processes for per-pool / per-grid-cell work
 seed = 20270101                # random seed for bootstraps and random selection
@@ -86,6 +86,9 @@ data_dir = "pool_data"
 # BigQuery exports (Query 1: daily gas cost of LP entry/exit; Query 3: Swap logs). "" = not available.
 gas_file = "pool_data/bigquery/script_job_4f5d1c6feed1ce61b406c406030dafe6_0.csv"
 swaps_file = "pool_data/bigquery/bq-results-20261027-055450-1793080502742.csv"
+# Swap logs of the thin-liquidity pool-months (see [experiments.fees]), computed swap by swap. [] = none.
+replay_swaps_files = ["pool_data/bigquery/job_iosgldBVFtwQFtbY8l9iSwbwq9z_.csv",    # Query 6
+                      "pool_data/bigquery/bq-results-20261109-110901-1794222553276.csv"]  # Query 7
 eth_token = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"   # WETH, prices gas costs in USD
 
 [experiments.sample]
@@ -109,6 +112,23 @@ capital_usd = 100_000          # total capital, split equally over the pools hel
 entry_swap_fraction = 0.5      # share of a new position swapped (at the pool's fee) to reach the token ratio
 include_gas = true             # charge the daily median gas cost of entry and exit
 
+[experiments.fees]
+# How a hypothetical position is credited with the pool's fees (paper Section III-A). It adds liquidity L to the
+# L_act in range: "fixed_volume" = L * dG * L_act / (L_act + L) (fixed-size swaps, conservative, main);
+# "proportional" = L * dG (arbitrage volume grows with the liquidity). They coincide for L << L_act.
+crediting = "fixed_volume"
+position_usd = 100_000         # size of each modelled position (all of the capital, so conservative for k > 1)
+# E12 grid: every rule x position size reruns the E5 backtest (the capital that gas is charged on = the size)
+sensitivity_rules = ["fixed_volume", "proportional"]
+sensitivity_position_usd = [10_000, 100_000, 1_000_000]
+exclude_periods = ["2023-07"]  # months also reported without (E5, E8, E12): CRV/WETH 0.30% in the Curve exploit
+# Thin-liquidity pool-months: swaps crossed nearly empty ticks, so the hourly fee growth implies far more fees than
+# traders paid. Months with implied / paid above replay_implied_ratio and a fee yield above replay_min_fee_yield
+# are computed swap by swap from [experiments.data].replay_swaps_files. Months the files do not cover are listed in
+# <output_dir>/thin_liquidity_months.csv, with a BigQuery query for them in <output_dir>/replay_query.sql.
+replay_implied_ratio = 5.0
+replay_min_fee_yield = 0.01
+
 [experiments.statistics]
 bootstrap_samples = 2000
 block_months = 3               # moving-block length for monthly series
@@ -123,7 +143,9 @@ tail_quantile = 0.10           # Net90 = median fee + P10(IL)
 horizon = "1m"                 # "<n>m" months or "<n>d" days
 calibration_months = 12        # 0 = expanding window
 top_k = [1, 3, 5]
-strategies = ["net_tail", "fee_minus_lvr", "median_fee", "low_variance", "mean_net", "equal_weight", "hodl_5050", "hodl_eth"]
+# fee_low_variance: highest median fee among the pools with below-median trailing variance (a simple risk filter)
+strategies = ["net_tail", "fee_minus_lvr", "median_fee", "fee_low_variance", "low_variance", "mean_net", "equal_weight",
+              "hodl_5050", "hodl_eth"]
 random_draws = 1000            # random top-k portfolios for the permutation baseline
 # Risk-aversion grid for fee - sigma^2/8 - lambda * tail, the tail being the model-based tail_quantile IL loss
 # (strategies lvr_tail_<lambda>; lambda = 0 is fee_minus_lvr). Fixed in advance, not tuned on the results.
@@ -165,6 +187,14 @@ validation_start = 2024-01-01  # swap-level validation window (must match BigQue
 validation_end = 2024-07-01
 plot_risk_aversion = [0, 0.25, 1]           # lambdas shown in ic_vs_range (every lambda is in ic_by_range.csv)
 
+[experiments.portfolio]
+# E13: correlation-aware choice of the k pools (k > 1 from [experiments.selection].top_k, same lambda grid)
+scenarios = 4000               # simulated months per decision for the portfolio's joint IL tail
+
+[experiments.rho_score]
+# E14: out-of-sample score from monthly rank regressions on trailing variance, fee [and token correlation rho]
+min_training_months = 12       # past monthly regressions before the score is used (expanding window)
+
 [experiments.fee_validation]
 # E0
 min_interval_hours = 24        # shorter snapshot intervals are dominated by the hourly granularity
@@ -182,8 +212,13 @@ eth_token = "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"   # WETH on Arbitrum
 # Settings for make_paper_assets.py (LaTeX tables, number macros and figures for the ICBC paper)
 # ======================================================================
 [paper]
-results_dir = "results_prelim"       # switch to "results" for the final run after Nov 1
+results_dir = "results_v2"           # fee crediting rules; results = daily-cap run, results_prelim = data through Oct 27
 output_dir = "overleaf/generated"    # \input{generated/...} in overleaf/main_icbc2027.tex
 sensitivity_k = 3                    # top-k whose E6 sensitivity heatmap goes into the paper
 main_k = 3                           # top-k quoted in the abstract
 abstract_lambda = 0.25               # the "moderate" tail penalty quoted in the abstract (must be in risk_aversion)
+table_risk_aversion = [0.25, 0.5, 1] # S_lambda rows of the selection table besides lambda = 0 (the frontier figure has all)
+table_top_k = [3, 5]                 # top-k columns of the selection table
+paper_dir = "overleaf"               # folder of the paper and references.bib
+main_tex = "main_icbc2027.tex"       # the paper's main file (the folder also holds other papers)
+upload_zip = "overleaf_icbc2027_upload.zip"  # zip of the paper and generated/ for Overleaf, rebuilt on every run

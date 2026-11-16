@@ -83,12 +83,12 @@ def mean_net(history: History) -> np.ndarray:
 
 
 def relative_value(history: History) -> np.ndarray:
-    """RV: mean of V_LP / V_HODL (= 1 + IL). Check the definition against ref. [22] (Roman et al.)."""
+    """RV: mean of V_LP / V_HODL (= 1 + IL), Eq. (35) of Tangri et al. (2023)."""
     return 1.0 + quiet(np.nanmean, history.il, axis=1)
 
 
 def fee_adjusted_relative_value(history: History) -> np.ndarray:
-    """FARV: mean of (V_LP + fees) / V_HODL (= 1 + net). Check the definition against ref. [22]."""
+    """FARV: mean of (V_LP + fees) / V_HODL (= 1 + net), Eq. (39) of Tangri et al. (2023)."""
     return 1.0 + quiet(np.nanmean, history.net, axis=1)
 
 

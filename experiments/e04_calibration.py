@@ -86,4 +86,26 @@ def run(ctx: Context, out_dir: Path) -> bool:
         rows.append({"label": "pooled", "category": "", "scheme": scheme, "metric": metric,
                      **coverage_row(hits, counts, target_by_metric[metric], confidence)})
     save_table(pd.DataFrame(rows), out_dir / "exceedance_tests.csv")
+    save_table(standardized_moves(panel, q), out_dir / "standardized_moves.csv")
     return True
+
+
+def standardized_summary(z: np.ndarray, tail_quantile: float) -> dict:
+    """Moments of z and its two-sided tail share, which is tail_quantile if z ~ N(0, 1)."""
+    cut = float(sps.norm.ppf(1 - tail_quantile / 2))
+    return {"n": len(z), "std": float(np.std(z, ddof=1)), "excess_kurtosis": float(sps.kurtosis(z)),
+            "tail_share": float(np.mean(np.abs(z) > cut)), "target": tail_quantile,
+            "jarque_bera_p": float(sps.jarque_bera(z).pvalue)}
+
+
+def standardized_moves(panel, tail_quantile: float) -> pd.DataFrame:
+    """Checks the tail model's assumption that the log price change of a month, divided by the realized volatility
+    of the same month, is close to N(0, 1). Months with zero realized variance (no trades) are left out."""
+    z = np.log(panel.ratio) / np.sqrt(np.where(panel.variance > 0, panel.variance, np.nan))
+    categories = np.array([meta.category for meta in panel.pools])[:, None].repeat(panel.n_periods, axis=1)
+    keep = panel.valid & np.isfinite(z)
+    frame = pd.DataFrame({"category": categories[keep], "z": z[keep]})
+    rows = [{"category": cat, **standardized_summary(g["z"].to_numpy(), tail_quantile)}
+            for cat, g in frame.groupby("category")]
+    rows.append({"category": "ALL", **standardized_summary(frame["z"].to_numpy(), tail_quantile)})
+    return pd.DataFrame(rows)

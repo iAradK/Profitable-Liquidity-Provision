@@ -6,7 +6,7 @@ from pathlib import Path
 from .client import GraphClient
 from .config import DownloadConfig, Pool
 from .schema import Schema
-from .storage import iso, load_json, save_json, write_csv
+from .storage import drop_unfinished, iso, load_json, save_json, write_csv
 
 log = logging.getLogger("subgraph")
 
@@ -37,6 +37,7 @@ def download_hourly(pool: Pool, *, client: GraphClient, created_ts: int, fields:
     path = out_dir / f"{pool.address}.json"
     csv_path = path.with_suffix(".csv")
     rows = [] if settings.force_refresh else load_hourly_rows(out_dir, pool.address)
+    rows = drop_unfinished(rows, "periodStartUnix", HOUR, path)
     start = max(settings.start_ts, created_ts // HOUR * HOUR)
     cursor = rows[-1]["periodStartUnix"] if rows else start - 1
     total_hours = max(1, (settings.end_ts - start) // HOUR)

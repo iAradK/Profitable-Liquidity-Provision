@@ -8,10 +8,12 @@ The LVR mean-tail family fee - sigma^2/8 - lambda * tail ('lvr_tail_<lambda>', m
 [experiments.selection].risk_aversion) runs alongside; lambda = 0 is fee - sigma^2/8, Net90 the empirical extreme.
 
 Outputs per k: monthly returns, performance table with risk metrics (VaR/CVaR at the tail quantile, worst month,
-drawdown; on the return relative to HODL and on the USD return), paired block-bootstrap tests of Net90 against
-every baseline, the random-portfolio distribution, subperiods, a cumulative-return figure, and the mean-tail
+drawdown; on the return relative to HODL and on the USD return) with a block-bootstrap interval of the mean and
+the mean without [experiments.fees].exclude_periods, paired block-bootstrap tests of Net90 and of fee - sigma^2/8
+against every other strategy, the random-portfolio distribution, subperiods, a cumulative-return figure, and the mean-tail
 risk-return frontier (table and figure). The information coefficient (score at t vs realized net at t, before costs)
-is computed for every score, per pool and per pair family.
+is computed for every score, per pool and per pair family. A robustness check repeats the backtest with the
+thin-liquidity pool-months (experiments.swaps) ineligible for every strategy.
 """
 
 from pathlib import Path
@@ -26,12 +28,14 @@ from experiments.outcomes import Panel, build_panel, sample_periods
 from experiments.output import save_table
 from experiments.plotting import STRATEGY_LABELS, apply_style, plt, save_figure, strategy_color
 from experiments.scores import lvr_tail_name, score_functions
-from experiments.selection import (Backtest, StrategyResult, cost_schedule, eth_returns,
+from experiments.selection import (FEE_BASELINES, Backtest, StrategyResult, cost_schedule, eth_returns,
                                    family_information_coefficients, information_coefficients, prepare_backtest,
-                                   random_portfolios, run_strategies, selection_rules, summarize_ic)
-from experiments.stats import paired_difference, performance
+                                   random_portfolios, run_strategies, selection_rules, summarize_ic,
+                                   without_thin_months)
+from experiments.stats import bootstrap_mean, paired_cvar_difference, paired_difference, performance
 
 MAIN_STRATEGY = "net_tail"
+TEST_REFERENCES = (MAIN_STRATEGY, "fee_minus_lvr")  # strategies tested pairwise against every other one
 
 
 def month_label(ts: np.ndarray) -> list[str]:
@@ -67,14 +71,21 @@ def returns_table(results: dict[str, StrategyResult], panel: Panel, k: int) -> p
     return pd.DataFrame(rows)
 
 
-def performance_table(results: dict[str, StrategyResult], k: int, periods_per_year: float,
-                      tail: float) -> pd.DataFrame:
+def performance_table(results: dict[str, StrategyResult], k: int, periods_per_year: float, tail: float,
+                      excluded: np.ndarray, block: int, config: ExperimentConfig, rng: np.random.Generator
+                      ) -> pd.DataFrame:
+    """Per strategy and measure: performance(), a block-bootstrap interval of the mean, and the mean without the
+    `excluded` periods ([experiments.fees].exclude_periods)."""
     rows = []
     reference = results.get("equal_weight")
     for name, result in results.items():
         for measure in ("excess", "usd"):
             values = getattr(result, measure)
             row = {"k": k, "strategy": name, "measure": measure, **performance(values, periods_per_year, tail)}
+            interval = bootstrap_mean(values, block, config.stats.bootstrap_samples, rng, config.stats.confidence)
+            row |= {"mean_lo": interval["lo"], "mean_hi": interval["hi"],
+                    "mean_excluding": float(np.nanmean(values[~excluded])) if np.isfinite(values[~excluded]).any()
+                    else np.nan}
             if reference is not None and name != "equal_weight":
                 both = np.isfinite(values) & np.isfinite(getattr(reference, measure))
                 if both.any():
@@ -84,19 +95,68 @@ def performance_table(results: dict[str, StrategyResult], k: int, periods_per_ye
     return pd.DataFrame(rows)
 
 
+def tail_test_table(results: dict[str, StrategyResult], k: int, risk_aversion: tuple[float, ...], tail: float,
+                    block: int, config: ExperimentConfig, rng: np.random.Generator) -> pd.DataFrame:
+    """Every point of the lambda frontier (lambda = 0 is fee - sigma^2/8) against each fee baseline: paired tests of
+    the mean excess return and of its CVaR. A positive CVaR difference means a smaller loss in the bad months."""
+    stats = config.stats
+    names = {0.0: "fee_minus_lvr"} | {lam: lvr_tail_name(lam) for lam in risk_aversion}
+    rows = []
+    for lam, name in names.items():
+        for baseline in (b for b in FEE_BASELINES if b in results and name in results):
+            a, b = results[name].excess, results[baseline].excess
+            mean = paired_difference(a, b, block, stats.bootstrap_samples, rng, stats.confidence)
+            cvar = paired_cvar_difference(a, b, tail, block, stats.bootstrap_samples, rng, stats.confidence)
+            rows.append({"k": k, "risk_aversion": lam, "strategy": name, "baseline": baseline,
+                         "mean_difference": mean["mean"], "mean_lo": mean["lo"], "mean_hi": mean["hi"],
+                         "mean_p_value": mean["p_value"], "cvar_difference": cvar["difference"],
+                         "cvar_lo": cvar["lo"], "cvar_hi": cvar["hi"], "cvar_p_value": cvar["p_value"],
+                         "n": mean["n"]})
+    return pd.DataFrame(rows)
+
+
 def comparison_table(results: dict[str, StrategyResult], k: int, block: int, config: ExperimentConfig,
                      rng: np.random.Generator) -> pd.DataFrame:
-    main = results[MAIN_STRATEGY]
+    """Paired block-bootstrap test of mean(reference - baseline) for every reference in TEST_REFERENCES."""
     rows = []
-    for name, result in results.items():
-        if name == MAIN_STRATEGY:
-            continue
-        for measure in ("excess", "usd"):
-            test = paired_difference(getattr(main, measure), getattr(result, measure), block,
-                                     config.stats.bootstrap_samples, rng, config.stats.confidence)
-            rows.append({"k": k, "baseline": name, "measure": measure, "mean_difference": test["mean"],
-                         "lo": test["lo"], "hi": test["hi"], "p_value": test["p_value"], "n": test["n"]})
+    for reference in (r for r in TEST_REFERENCES if r in results):
+        main = results[reference]
+        for name, result in results.items():
+            if name == reference:
+                continue
+            for measure in ("excess", "usd"):
+                test = paired_difference(getattr(main, measure), getattr(result, measure), block,
+                                         config.stats.bootstrap_samples, rng, config.stats.confidence)
+                rows.append({"k": k, "reference": reference, "baseline": name, "measure": measure,
+                             "mean_difference": test["mean"], "lo": test["lo"], "hi": test["hi"],
+                             "p_value": test["p_value"], "n": test["n"]})
     return pd.DataFrame(rows)
+
+
+def no_thin_tables(backtest: Backtest, strategies: tuple[str, ...], schedule, eth_return: np.ndarray,
+                   config: ExperimentConfig, block: int, rng: np.random.Generator) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Robustness check with the thin-liquidity pool-months ineligible for every strategy: per k and strategy the
+    mean excess return (block-bootstrap interval), CVaR and the paired test against fee - sigma^2/8; per score the
+    information coefficient."""
+    sel, stats = config.selection, config.stats
+    rows = []
+    for k in sel.top_k:
+        results = run_strategies(backtest, strategies, k, schedule, eth_return)
+        reference = results["fee_minus_lvr"].excess
+        for name, result in results.items():
+            interval = bootstrap_mean(result.excess, block, stats.bootstrap_samples, rng, stats.confidence)
+            test = paired_difference(reference, result.excess, block, stats.bootstrap_samples, rng, stats.confidence)
+            rows.append({"k": k, "strategy": name, "mean": interval["mean"], "mean_lo": interval["lo"],
+                         "mean_hi": interval["hi"],
+                         "cvar": performance(result.excess, sel.horizon.periods_per_year,
+                                             sel.tail_quantile).get("cvar", np.nan),
+                         "fee_minus_lvr_minus_this": test["mean"], "p_value": test["p_value"]})
+    ic_rows = []
+    for name, scores in backtest.scores.items():
+        ic = information_coefficients(scores, backtest.panel.net, backtest.eligible, stats.min_pools_for_ic)
+        ic_rows.append({"score": name, **summarize_ic(ic[backtest.decisions], stats.newey_west_lags, block,
+                                                      stats.bootstrap_samples, rng, stats.confidence)})
+    return pd.DataFrame(rows), pd.DataFrame(ic_rows)
 
 
 def subperiod_table(results: dict[str, StrategyResult], panel: Panel, k: int, config: ExperimentConfig
@@ -138,8 +198,8 @@ def frontier_table(perf: pd.DataFrame, risk_aversions: tuple[float, ...]) -> pd.
     lam = {lvr_tail_name(x): x for x in risk_aversions} | {"fee_minus_lvr": 0.0}
     rows = perf[perf["measure"] == "excess"].copy()
     rows.insert(2, "risk_aversion", rows["strategy"].map(lam))
-    return rows[["k", "strategy", "risk_aversion", "mean", "median", "var", "cvar", "worst", "max_drawdown",
-                 "sortino", "share_positive"]]
+    return rows[["k", "strategy", "risk_aversion", "mean", "mean_lo", "mean_hi", "mean_excluding", "median", "var",
+                 "cvar", "worst", "max_drawdown", "sortino", "share_positive"]]
 
 
 def plot_frontier(frontier: pd.DataFrame, path_stem: Path) -> None:
@@ -178,6 +238,8 @@ def run_selection_experiment(market: MarketData, config: ExperimentConfig, out_d
     eth_return = eth_returns(market, panel)
     block = sel.horizon.periods_for_months(config.stats.block_months)
     rng = np.random.default_rng(config.seed)
+    decision_months = np.array([m[:7] for m in month_label(panel.starts[backtest.decisions])])
+    excluded = np.isin(decision_months, config.fees.exclude_periods)
 
     by_period, ic_summary = ic_tables(backtest, config, block, rng)
     save_table(by_period, out_dir / "ic_by_period.csv")
@@ -186,12 +248,14 @@ def run_selection_experiment(market: MarketData, config: ExperimentConfig, out_d
                              "n_eligible": backtest.eligible[:, backtest.decisions].sum(axis=0)})
     save_table(universe, out_dir / "eligible_pools_per_period.csv")
 
-    returns, perf, comparisons, subperiods, random_rows = [], [], [], [], []
+    returns, perf, comparisons, tail_tests, subperiods, random_rows = [], [], [], [], [], []
     for k in sel.top_k:
         results = run_strategies(backtest, strategies, k, schedule, eth_return)
         returns.append(returns_table(results, panel, k))
-        perf.append(performance_table(results, k, sel.horizon.periods_per_year, sel.tail_quantile))
+        perf.append(performance_table(results, k, sel.horizon.periods_per_year, sel.tail_quantile, excluded, block,
+                                      config, rng))
         comparisons.append(comparison_table(results, k, block, config, rng))
+        tail_tests.append(tail_test_table(results, k, sel.risk_aversion, sel.tail_quantile, block, config, rng))
         subperiods.append(subperiod_table(results, panel, k, config))
         draws = random_portfolios(backtest, k, schedule, sel.random_draws, rng)
         main_mean = float(np.nanmean(results[MAIN_STRATEGY].excess))
@@ -206,9 +270,17 @@ def run_selection_experiment(market: MarketData, config: ExperimentConfig, out_d
     frontier = frontier_table(perf_df, sel.risk_aversion)
     save_table(frontier, out_dir / "risk_return_frontier.csv")
     plot_frontier(frontier, out_dir / "risk_return_frontier")
-    save_table(pd.concat(comparisons), out_dir / "net_tail_vs_baselines.csv")
+    tests = pd.concat(comparisons)
+    save_table(tests, out_dir / "paired_tests.csv")
+    save_table(tests[tests["reference"] == MAIN_STRATEGY].drop(columns="reference"),
+               out_dir / "net_tail_vs_baselines.csv")
+    save_table(pd.concat(tail_tests), out_dir / "tail_tests.csv")
     save_table(pd.concat(subperiods), out_dir / "subperiods.csv")
     save_table(pd.DataFrame(random_rows), out_dir / "random_portfolios.csv")
+    robust, robust_ic = no_thin_tables(without_thin_months(backtest, market.thin_months), strategies, schedule,
+                                       eth_return, config, block, rng)
+    save_table(robust, out_dir / "no_thin_months.csv")
+    save_table(robust_ic, out_dir / "no_thin_months_ic.csv")
 
 
 def run(ctx: Context, out_dir: Path) -> bool:

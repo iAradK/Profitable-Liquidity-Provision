@@ -13,7 +13,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from experiments.config import Pool
+from experiments.config import FeeCrediting, Pool
 from subgraph.parallel import run_each
 
 log = logging.getLogger("experiments")
@@ -95,15 +95,30 @@ class HourlyGrid:
 
 
 @dataclass(frozen=True)
+class SwapReplay:
+    """Swaps of one pool (sorted, from the BigQuery Swap logs) for the windows [start, end) whose fees are computed
+    swap by swap: amounts are raw and signed from the pool's perspective; sqrt_price and liquidity are after the
+    swap."""
+    windows: tuple[tuple[int, int], ...]
+    ts: np.ndarray
+    amount0: np.ndarray
+    amount1: np.ndarray
+    sqrt_price: np.ndarray
+    liquidity: np.ndarray
+
+
+@dataclass(frozen=True)
 class PoolData:
     """Per grid state (hour): usd0/usd1, the USD value of one raw base unit of token0/token1 (NaN before prices
-    exist); day_fees_usd, the fees all swappers paid in the pool over that hour's UTC day (NaN without daily data).
-    """
+    exist); fee_liquidity, the in-range liquidity the fees of the hour ending at that state were shared by (see
+    fee_weighted_liquidity; NaN for state 0 and where it is unknown); replay, the swaps of the windows whose fees
+    are computed swap by swap (experiments.swaps.attach_replay)."""
     meta: PoolMeta
     grid: HourlyGrid
     usd0: np.ndarray
     usd1: np.ndarray
-    day_fees_usd: np.ndarray
+    fee_liquidity: np.ndarray
+    replay: SwapReplay | None = None
 
 
 @dataclass(frozen=True)
@@ -139,7 +154,10 @@ class MarketData:
     gas: GasCosts
     eth_usd: TokenPrices
     data_end_ts: int
-    position_usd: float  # size of the modelled position; caps its hourly fees at what the pool paid
+    crediting: FeeCrediting  # how the modelled position is credited with the pool's fees
+    # (pool address, period start) of the thin-liquidity pool-months (experiments.swaps), all of them flagged
+    # whether or not they are replayed; strategies are also evaluated without them (selection.without_thin_months)
+    thin_months: tuple[tuple[str, int], ...] = ()
 
     def token_prices(self, token: str) -> TokenPrices:
         if token not in self.prices:
@@ -258,7 +276,7 @@ def usd_per_raw_unit(prices: TokenPrices | None, decimals: int, t_end: np.ndarra
 
 
 def day_fees_per_hour(path: Path, fee_rate: float, t_end: np.ndarray) -> np.ndarray:
-    """Pool fees in USD of the UTC day of every grid hour; days without a row paid nothing."""
+    """Pool fees in USD of the UTC day of every grid hour; days without a row paid nothing (NaN without the file)."""
     if not path.exists():
         return np.full(len(t_end), np.nan)
     df = pd.read_csv(path, usecols=["date", "volumeUSD", "feesUSD"])
@@ -268,9 +286,35 @@ def day_fees_per_hour(path: Path, fee_rate: float, t_end: np.ndarray) -> np.ndar
     return np.array([by_day.get(int(d), 0.0) for d in day])
 
 
+def fee_weighted_liquidity(grid: HourlyGrid, usd0: np.ndarray, usd1: np.ndarray,
+                           day_fees_usd: np.ndarray) -> np.ndarray:
+    """Per grid state i >= 1: the fees all swappers paid on the UTC day of the hour ending at i, divided by the fee
+    growth per unit of liquidity over that day (both in USD).
+
+    Each swap adds fee_s / L_s to the fee growth, where L_s is the liquidity in range at the swap. The ratio is
+    sum(fee_s) / sum(fee_s / L_s), the fee-weighted harmonic mean of L_s. Unlike the liquidity at the ends of an
+    hour, it reflects swaps that cross nearly empty ticks, whose fee growth jumps. NaN where the day has no daily
+    fees, no USD prices or no fee growth.
+    """
+    growth_usd = np.full(len(grid.t_end), np.nan)
+    growth_usd[1:] = (np.diff(grid.fee_growth0) * usd0[1:] + np.diff(grid.fee_growth1) * usd1[1:])
+    day = (grid.t_end - 1) // DAY
+    days, day_of_hour = np.unique(day, return_inverse=True)
+    day_growth = np.bincount(day_of_hour, weights=np.nan_to_num(growth_usd), minlength=len(days))
+    missing = np.isnan(growth_usd)
+    missing[0] = False  # state 0 has no hour ending at it
+    unpriced = np.bincount(day_of_hour, weights=missing.astype(float), minlength=len(days)) > 0
+    with np.errstate(divide="ignore", invalid="ignore"):
+        liquidity = day_fees_usd / day_growth[day_of_hour]
+    known = (day_fees_usd > 0) & (day_growth[day_of_hour] > 0) & ~unpriced[day_of_hour]
+    liquidity = np.where(known, liquidity, np.nan)
+    liquidity[0] = np.nan
+    return liquidity
+
+
 def load_market(data_dir: Path, gas_file: Path | None, eth_token: str, universe: tuple[Pool, ...] | None,
                 label_categories: dict[str, str], cache_dir: Path, max_workers: int,
-                force_refresh: bool, position_usd: float) -> MarketData:
+                force_refresh: bool, crediting: FeeCrediting) -> MarketData:
     metas = load_pool_meta(data_dir, universe, label_categories)
     task = partial(load_grid, hourly_dir=data_dir / "hourly", cache_dir=cache_dir, force_refresh=force_refresh)
     batch = run_each([m.address for m in metas], task, name=str, max_workers=max_workers, use_processes=True)
@@ -285,14 +329,20 @@ def load_market(data_dir: Path, gas_file: Path | None, eth_token: str, universe:
     pools = []
     for m in metas:
         grid = batch.results[m.address]
-        pools.append(PoolData(m, grid, usd_per_raw_unit(prices.get(m.token0), m.decimals0, grid.t_end),
-                              usd_per_raw_unit(prices.get(m.token1), m.decimals1, grid.t_end),
-                              day_fees_per_hour(data_dir / "daily" / f"{m.address}.csv", m.fee_rate, grid.t_end)))
+        usd0 = usd_per_raw_unit(prices.get(m.token0), m.decimals0, grid.t_end)
+        usd1 = usd_per_raw_unit(prices.get(m.token1), m.decimals1, grid.t_end)
+        day_fees = day_fees_per_hour(data_dir / "daily" / f"{m.address}.csv", m.fee_rate, grid.t_end)
+        pools.append(PoolData(m, grid, usd0, usd1, fee_weighted_liquidity(grid, usd0, usd1, day_fees)))
     pools = tuple(pools)
-    no_daily = [p.meta.label for p in pools if np.isnan(p.day_fees_usd).all()]
+    no_daily = [p.meta.label for p in pools if np.isnan(p.fee_liquidity).all()]
     if no_daily:
-        log.warning("no daily fees (run the 'daily' download step), fees are NOT capped for: %s", ", ".join(no_daily))
+        log.warning("no daily fees (run the 'daily' download step); the in-range liquidity of each hour is used "
+                    "instead of the fee-weighted one for: %s", ", ".join(no_daily))
+    unpriced = [p.meta.label for p in pools if np.isnan(p.usd0).all() or np.isnan(p.usd1).all()]
+    if unpriced:
+        log.warning("no USD prices, so the position size is unknown and fees are credited as L * dG for: %s",
+                    ", ".join(unpriced))
     data_end = max(int(p.grid.t_end[-1]) for p in pools)
     log.info("loaded %d pools, %d token price series; data ends %s", len(pools), len(prices),
              pd.Timestamp(data_end, unit="s"))
-    return MarketData(pools, prices, load_gas_costs(gas_file), prices[eth_token], data_end, position_usd)
+    return MarketData(pools, prices, load_gas_costs(gas_file), prices[eth_token], data_end, crediting)

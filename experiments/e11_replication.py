@@ -24,6 +24,6 @@ def run(ctx: Context, out_dir: Path) -> bool:
     market = load_market(rep.data_dir, rep.gas_file, rep.eth_token, universe=None,
                          label_categories={p.label: p.category for p in cfg.pools},
                          cache_dir=cfg.cache_dir / f"grids_{rep.data_dir.name}", max_workers=cfg.max_workers,
-                         force_refresh=cfg.force_refresh, position_usd=cfg.costs.capital_usd)
+                         force_refresh=cfg.force_refresh, crediting=cfg.fees.main)
     run_selection_experiment(market, cfg, out_dir)
     return True

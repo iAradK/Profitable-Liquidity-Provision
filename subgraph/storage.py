@@ -26,6 +26,20 @@ def load_json(path: Path, default: object = None) -> object:
         return json.load(f)
 
 
+def drop_unfinished(rows: list[dict], time_key: str, period_seconds: int, saved_path: Path) -> list[dict]:
+    """Drop trailing rows whose hour/day had not ended when the file was saved, so they are fetched again.
+
+    The subgraph keeps updating the current period's row until it ends, so a row saved mid-period is partial.
+    """
+    if not saved_path.exists():
+        return rows
+    saved_at = saved_path.stat().st_mtime
+    end = len(rows)
+    while end and int(rows[end - 1][time_key]) + period_seconds > saved_at:
+        end -= 1
+    return rows[:end]
+
+
 def flatten(row: dict, prefix: str = "") -> dict:
     """{'token0': {'id': ..}} -> {'token0_id': ..}; values stay strings (no float conversion)."""
     out = {}

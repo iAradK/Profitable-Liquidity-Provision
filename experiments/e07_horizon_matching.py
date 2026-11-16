@@ -67,7 +67,7 @@ def decision_rows(ctx: Context) -> pd.DataFrame:
                 exit_t = min(t + months, len(schedule.exit_gas_usd) - 1)
                 cost = ((schedule.entry_gas_usd[t] + schedule.exit_gas_usd[exit_t]) / capital_per_position
                         + cfg.costs.entry_swap_fraction * pool.meta.fee_rate)
-                outcome = position_outcome(pool, i0, i1, position_usd=market.position_usd)
+                outcome = position_outcome(pool, i0, i1, crediting=market.crediting)
                 value = monthly_equivalent(outcome.net - cost, months)
                 if months in hm.fixed_months:
                     row[f"fixed_{months}m"] = value

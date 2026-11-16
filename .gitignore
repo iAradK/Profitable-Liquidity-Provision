@@ -13,4 +13,8 @@ old/
 
 # Large / regenerable data
 pool_data/
-results_prelim/cache/
+pool_data_arbitrum/
+results*/cache/
+
+# Overleaf upload, rebuilt by make_paper_assets.py
+overleaf_icbc2027_upload.zip

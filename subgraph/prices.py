@@ -8,9 +8,11 @@ from .client import GraphClient
 from .config import DownloadConfig
 from .meta import PoolMeta
 from .schema import Schema
-from .storage import load_json, save_json, write_csv
+from .storage import drop_unfinished, load_json, save_json, write_csv
 
 log = logging.getLogger("subgraph")
+
+DAY = 86400
 
 TOKEN_DAY_FIELDS = ["date", "priceUSD", "open", "high", "low", "close"]
 
@@ -36,7 +38,7 @@ def download_token_prices(token: Token, *, client: GraphClient, fields: list[str
     path = out_dir / f"{token.address}.json"
     csv_path = path.with_suffix(".csv")
     saved = {} if settings.force_refresh else load_json(path, {})
-    rows = saved.get("data", {}).get("tokenDayDatas", [])
+    rows = drop_unfinished(saved.get("data", {}).get("tokenDayDatas", []), "date", DAY, path)
     cursor = rows[-1]["date"] if rows else settings.start_ts - 1
 
     new_rows = 0

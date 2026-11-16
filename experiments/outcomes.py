@@ -13,8 +13,8 @@ from datetime import datetime, timezone
 
 import numpy as np
 
-from experiments.config import Horizon, SampleConfig
-from experiments.data import DAY, HourlyGrid, MarketData, PoolData, PoolMeta
+from experiments.config import FeeCrediting, Horizon, SampleConfig
+from experiments.data import DAY, HourlyGrid, MarketData, PoolData, PoolMeta, SwapReplay
 
 
 def il_from_ratio(ratio: np.ndarray | float) -> np.ndarray | float:
@@ -40,34 +40,103 @@ class Outcome:
         return self.il + self.fee_yield
 
 
-def fee_cap_scale(pool: PoolData, i0: int, i1: int, x0: float, y0: float, credit: np.ndarray,
-                  d0: np.ndarray, d1: np.ndarray, position_usd: float) -> np.ndarray:
-    """Per-hour factor <= 1 so a position of position_usd never earns more in a UTC day than all swappers paid.
+def position_liquidity(pool: PoolData, i0: int, x0: float, y0: float, crediting: FeeCrediting | None) -> float:
+    """Liquidity L that crediting.position_usd buys at grid state i0 (x0, y0: token amounts per unit of liquidity).
 
-    feeGrowth is fees per unit of in-range liquidity. When a swap pushes the price through nearly empty ticks it
-    jumps, and a price-taker position (much larger than the liquidity actually in range) would be credited far
-    more than the pool's total fees. The cap is daily because the subgraph's hourly feesUSD is zero before 2024.
-    Hours with unknown USD prices, and pools without daily fees, are left uncapped.
+    0 means the position is treated as too small to matter: no crediting, or no USD prices at entry (then the
+    position size is unknown).
     """
-    usd0, usd1 = pool.usd0[i0:i1 + 1], pool.usd1[i0:i1 + 1]
-    liquidity = position_usd / (x0 * usd0[0] + y0 * usd1[0])
-    earned = np.nan_to_num(liquidity * credit * (d0 * usd0[1:] + d1 * usd1[1:]))
-    days, day_of_hour = np.unique((pool.grid.t_end[i0 + 1:i1 + 1] - 1) // DAY, return_inverse=True)
-    earned_per_day = np.bincount(day_of_hour, weights=earned, minlength=len(days))
-    paid_per_day = np.zeros(len(days))
-    paid_per_day[day_of_hour] = pool.day_fees_usd[i0 + 1:i1 + 1]
-    with np.errstate(divide="ignore", invalid="ignore"):
-        scale = np.where(earned_per_day > paid_per_day, paid_per_day / earned_per_day, 1.0)
-    return np.where(np.isfinite(scale), scale, 1.0)[day_of_hour]
+    if crediting is None:
+        return 0.0
+    value_per_liquidity = x0 * pool.usd0[i0] + y0 * pool.usd1[i0]
+    if not np.isfinite(value_per_liquidity) or value_per_liquidity <= 0:
+        return 0.0
+    return crediting.position_usd / value_per_liquidity
+
+
+def sharing_liquidity(pool: PoolData, i0: int, i1: int) -> np.ndarray:
+    """Per hour from state i0 to i1: the in-range liquidity L_act the hour's fees were shared by.
+
+    The fee-weighted liquidity of the hour's UTC day (fees paid / fee growth, see fee_weighted_liquidity), or the
+    mean in-range liquidity at the two ends of the hour where the daily fees are unknown.
+    """
+    liquidity = pool.grid.liquidity[i0:i1 + 1]
+    fee_weighted = pool.fee_liquidity[i0 + 1:i1 + 1]
+    return np.where(np.isfinite(fee_weighted), fee_weighted, 0.5 * (liquidity[:-1] + liquidity[1:]))
+
+
+def crediting_factor(pool: PoolData, i0: int, i1: int, x0: float, y0: float,
+                     crediting: FeeCrediting | None) -> np.ndarray | float:
+    """Per-hour share of the credit L * dG that the position keeps under the crediting rule (Section III-A).
+
+    fixed_volume: L_act / (L_act + L). Swaps of a fixed size pay the same fees, now shared with the position.
+        With L_act the fee-weighted harmonic mean of the liquidity at the swaps, this is an upper bound on the
+        swap-by-swap credit sum_s fee_s * L / (L_s + L) (Jensen), and it never exceeds the fees paid.
+    proportional: min(1, L_act / L). Arbitrage volume, and hence its fees, grows with the liquidity, up to the
+        fees traders actually paid (a swap through nearly empty ticks makes dG jump without more volume).
+    The two coincide for L << L_act.
+    """
+    position = position_liquidity(pool, i0, x0, y0, crediting)
+    if position == 0.0:
+        return 1.0
+    ratio = sharing_liquidity(pool, i0, i1) / position
+    if crediting.rule == "fixed_volume":
+        return ratio / (1.0 + ratio)
+    return np.minimum(1.0, ratio)
+
+
+def swap_growth(after: np.ndarray, liquidity: np.ndarray, amount0: np.ndarray, amount1: np.ndarray,
+                s_start: float, l_start: float, sa: float, sb: float, fee_rate: float, position: float,
+                rule: str | None) -> tuple[float, float]:
+    """Fee growth per unit of liquidity credited to a position of range [sa, sb] (sqrt prices) over a run of swaps.
+
+    Each swap pays fee_rate on its input amount, shared by the liquidity in range L_s. A Swap event records only
+    the liquidity after the swap; a swap that ends in a nearly empty region paid most of its fee before, where the
+    liquidity was higher. Hence L_s is the larger of the liquidity before the swap (after the previous one, or
+    l_start for the first) and after it. The credit is half when the price enters or leaves the range during the
+    swap. With a position of liquidity L > 0 the rule scales each swap like crediting_factor does each hour:
+    fixed_volume L_s / (L_s + L), proportional min(1, L_s / L).
+    """
+    active = liquidity > 0
+    after, liquidity, amount0, amount1 = after[active], liquidity[active], amount0[active], amount1[active]
+    before = np.concatenate([[s_start], after[:-1]])
+    liquidity = np.maximum(liquidity, np.concatenate([[l_start], liquidity[:-1]]))
+    credit = 0.5 * (((before >= sa) & (before <= sb)).astype(float) + ((after >= sa) & (after <= sb)))
+    if position > 0 and rule == "fixed_volume":
+        credit = credit * liquidity / (liquidity + position)
+    elif position > 0 and rule == "proportional":
+        credit = credit * np.minimum(1.0, liquidity / position)
+    growth0 = np.where(amount0 > 0, amount0 * fee_rate, 0.0) / liquidity
+    growth1 = np.where(amount1 > 0, amount1 * fee_rate, 0.0) / liquidity
+    return float(credit @ growth0), float(credit @ growth1)
+
+
+def replayed_fees(replay: SwapReplay, t: np.ndarray, s: np.ndarray, liquidity: np.ndarray, credit: np.ndarray,
+                  sa: float, sb: float, fee_rate: float, position: float, rule: str | None) -> tuple[float, float]:
+    """Swap-by-swap fee growth for the hours of t (grid state times) inside the replay windows. Their hourly credit
+    is set to 0 in place, so the hourly and the swap-based parts never overlap."""
+    fee0 = fee1 = 0.0
+    for w0, w1 in replay.windows:
+        hours = (t[:-1] >= w0) & (t[1:] <= w1)
+        if not hours.any():
+            continue
+        credit[hours] = 0.0
+        first, last = int(np.argmax(hours)), len(hours) - 1 - int(np.argmax(hours[::-1]))
+        rows = slice(*np.searchsorted(replay.ts, [t[first], t[last + 1]]))
+        g0, g1 = swap_growth(replay.sqrt_price[rows], replay.liquidity[rows], replay.amount0[rows],
+                             replay.amount1[rows], s[first], liquidity[first], sa, sb, fee_rate, position, rule)
+        fee0, fee1 = fee0 + g0, fee1 + g1
+    return fee0, fee1
 
 
 def position_outcome(pool: PoolData, i0: int, i1: int, lower: float = 0.0, upper: float = np.inf,
-                     position_usd: float | None = None) -> Outcome:
+                     crediting: FeeCrediting | None = None) -> Outcome:
     """Position opened at grid state i0 and closed at state i1 with range [lower * s0, upper * s0] in sqrt price.
 
     Fees accrue in hours when the price is in range: full credit when the price is inside at both ends of the
-    hour, half credit when it enters or leaves during the hour. With position_usd, each hour's fees are capped
-    at the pool's feesUSD for that hour (see fee_cap_scale).
+    hour, half credit when it enters or leaves during the hour. Without `crediting`, fees are L * dG per unit of
+    liquidity (Eq. fee_growth); with it, each hour's credit is scaled by crediting_factor. Hours inside the pool's
+    replay windows are credited swap by swap instead (replayed_fees).
     """
     grid = pool.grid
     s = grid.sqrt_price[i0:i1 + 1]
@@ -79,10 +148,15 @@ def position_outcome(pool: PoolData, i0: int, i1: int, lower: float = 0.0, upper
     inside = ((s >= sa) & (s <= sb)).astype(float)
     credit = 0.5 * (inside[:-1] + inside[1:])
     d0, d1 = np.diff(grid.fee_growth0[i0:i1 + 1]), np.diff(grid.fee_growth1[i0:i1 + 1])
-    if position_usd is not None:
-        credit = credit * fee_cap_scale(pool, i0, i1, x0, y0, credit, d0, d1, position_usd)
-    fee0 = credit @ d0
-    fee1 = credit @ d1
+    credit = credit * crediting_factor(pool, i0, i1, x0, y0, crediting)
+    swap0 = swap1 = 0.0
+    if pool.replay is not None:
+        swap0, swap1 = replayed_fees(pool.replay, grid.t_end[i0:i1 + 1], s, grid.liquidity[i0:i1 + 1], credit,
+                                     sa, sb, pool.meta.fee_rate,
+                                     position_liquidity(pool, i0, x0, y0, crediting),
+                                     crediting.rule if crediting else None)
+    fee0 = credit @ d0 + swap0
+    fee1 = credit @ d1 + swap1
     log_price = 2.0 * np.log(s)
     return Outcome(il=float((x1 * s1**2 + y1) / hodl - 1.0),
                    fee_yield=float((fee0 * s1**2 + fee1) / hodl),
@@ -166,7 +240,7 @@ def build_panel(market: MarketData, starts: np.ndarray, ends: np.ndarray, horizo
             hi = np.inf if upper is None else upper[p, t]
             if np.isnan(lo) or np.isnan(hi):
                 continue
-            outcome = position_outcome(pool, int(i0[t]), int(i1[t]), lo, hi, market.position_usd)
+            outcome = position_outcome(pool, int(i0[t]), int(i1[t]), lo, hi, market.crediting)
             il[p, t], fee[p, t] = outcome.il, outcome.fee_yield
             ratio[p, t], variance[p, t] = outcome.ratio, outcome.variance
         started = i0 >= 0

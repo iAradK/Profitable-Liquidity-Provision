@@ -12,6 +12,11 @@ from experiments.scores import History, ScoreFn
 from experiments.stats import bootstrap_mean, newey_west, quiet, spearman
 
 BENCHMARKS = ("hodl_5050", "hodl_eth")
+# Screened scores: name -> (ranking score, screening score). The screened score ranks by the first score among the
+# eligible pools whose screening score is at least its cross-sectional median at that decision, i.e. a simple
+# variance filter (low_variance = -trailing variance) followed by fee ranking. The median cut is fixed in advance.
+SCREENED_SCORES = {"fee_low_variance": ("median_fee", "low_variance")}
+FEE_BASELINES = ("median_fee", "fee_low_variance")  # fees only, and fees after a variance screen
 
 
 @dataclass(frozen=True)
@@ -70,6 +75,24 @@ def score_matrix(panel: Panel, rules: SelectionRules, eligible: np.ndarray, scor
     return scores
 
 
+def screened(rank: np.ndarray, screen: np.ndarray, eligible: np.ndarray) -> np.ndarray:
+    """rank where screen >= its median over the eligible pools of that period; NaN elsewhere."""
+    out = np.full(rank.shape, np.nan)
+    for t in np.flatnonzero(eligible.any(axis=0)):
+        values = np.where(eligible[:, t], screen[:, t], np.nan)
+        if np.isfinite(values).any():
+            keep = values >= np.nanmedian(values)
+            out[keep, t] = rank[keep, t]
+    return out
+
+
+def with_screened_scores(scores: dict[str, np.ndarray], eligible: np.ndarray) -> dict[str, np.ndarray]:
+    """Adds every SCREENED_SCORES entry whose two inputs are present."""
+    extra = {name: screened(scores[rank], scores[screen], eligible)
+             for name, (rank, screen) in SCREENED_SCORES.items() if rank in scores and screen in scores}
+    return scores | extra
+
+
 @dataclass(frozen=True)
 class Backtest:
     panel: Panel
@@ -84,8 +107,24 @@ class Backtest:
 
 def prepare_backtest(panel: Panel, rules: SelectionRules, score_fns: dict[str, ScoreFn]) -> Backtest:
     eligible = eligibility(panel, rules)
-    return Backtest(panel, rules, eligible, {name: score_matrix(panel, rules, eligible, fn)
-                                             for name, fn in score_fns.items()})
+    scores = {name: score_matrix(panel, rules, eligible, fn) for name, fn in score_fns.items()}
+    return Backtest(panel, rules, eligible, with_screened_scores(scores, eligible))
+
+
+def without_thin_months(backtest: Backtest, thin_months: tuple[tuple[str, int], ...]) -> Backtest:
+    """The same backtest with the thin-liquidity pool-months (pool address, period start) ineligible for every
+    strategy. The flag uses the realized month, so this is an after-the-fact robustness check of how much the
+    results depend on those months, not a rule an LP could apply."""
+    panel = backtest.panel
+    pool_index = {meta.address: p for p, meta in enumerate(panel.pools)}
+    period_index = {int(start): t for t, start in enumerate(panel.starts)}
+    eligible = backtest.eligible.copy()
+    for address, start in thin_months:
+        if address in pool_index and start in period_index:
+            eligible[pool_index[address], period_index[start]] = False
+    scores = {name: np.where(eligible, values, np.nan) for name, values in backtest.scores.items()
+              if name not in SCREENED_SCORES}
+    return Backtest(panel, backtest.rules, eligible, with_screened_scores(scores, eligible))
 
 
 # ---------------------------------------------------------------- costs and portfolio returns

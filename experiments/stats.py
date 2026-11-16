@@ -59,6 +59,27 @@ def paired_difference(a: np.ndarray, b: np.ndarray, block: int, n_samples: int, 
     return bootstrap_mean(np.asarray(a)[both] - np.asarray(b)[both], block, n_samples, rng, confidence)
 
 
+def tail_mean(x: np.ndarray, tail: float) -> float:
+    """CVaR (expected shortfall): mean of the values at or below the `tail` quantile."""
+    return float(x[x <= np.quantile(x, tail)].mean())
+
+
+def paired_cvar_difference(a: np.ndarray, b: np.ndarray, tail: float, block: int, n_samples: int,
+                           rng: np.random.Generator, confidence: float) -> dict[str, float]:
+    """CVaR(a) - CVaR(b) over the periods where both are defined, with a paired moving-block bootstrap interval
+    and a two-sided p-value for a zero difference (both series resampled with the same blocks)."""
+    both = np.isfinite(a) & np.isfinite(b)
+    a, b = np.asarray(a)[both], np.asarray(b)[both]
+    if len(a) < 3:
+        return {"difference": math.nan, "lo": math.nan, "hi": math.nan, "p_value": math.nan, "n": len(a)}
+    difference = tail_mean(a, tail) - tail_mean(b, tail)
+    samples = np.array([tail_mean(a[i], tail) - tail_mean(b[i], tail)
+                        for i in block_bootstrap_indices(len(a), block, n_samples, rng)])
+    lo, hi = percentile_interval(samples, confidence)
+    p_value = float(np.mean(np.abs(samples - difference) >= abs(difference)))
+    return {"difference": difference, "lo": lo, "hi": hi, "p_value": p_value, "n": len(a)}
+
+
 # ---------------------------------------------------------------- coverage tests
 
 def wilson_interval(k: int, n: int, confidence: float) -> tuple[float, float]:

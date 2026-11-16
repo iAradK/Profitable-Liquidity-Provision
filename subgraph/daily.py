@@ -10,7 +10,7 @@ from pathlib import Path
 from .client import GraphClient
 from .config import DownloadConfig, Pool
 from .schema import Schema
-from .storage import iso, load_json, save_json, write_csv
+from .storage import drop_unfinished, iso, load_json, save_json, write_csv
 
 log = logging.getLogger("subgraph")
 
@@ -32,7 +32,7 @@ def download_daily(pool: Pool, *, client: GraphClient, created_ts: int, fields: 
     path = out_dir / f"{pool.address}.json"
     csv_path = path.with_suffix(".csv")
     saved = {} if settings.force_refresh else load_json(path, {})
-    rows = saved.get("data", {}).get("poolDayDatas", [])
+    rows = drop_unfinished(saved.get("data", {}).get("poolDayDatas", []), "date", DAY, path)
     start = max(settings.start_ts, created_ts // DAY * DAY)
     cursor = rows[-1]["date"] if rows else start - 1
 
